@@ -1,6 +1,6 @@
 # Starception
 
-Beautiful debugging page for Starlette apps. Look and feel inspired by Elixir Phoenix.
+Beautiful debugging page for Starlette apps implemented as ASGI middleware.
 
 ![PyPI](https://img.shields.io/pypi/v/starception)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/alex-oleshkevich/starception/Lint)
@@ -36,6 +36,19 @@ instead it will display plain string "Internal Server Error".
 Also, I would recommend to add it only for local development, as such error page,
 when enabled on prod by mistake, can expose sensitive data.
 
+### Usage with FastAPI
+
+As this is pure ASGI middleware, you can use it with FastAPI. However, you cannot use `app.middleware` decorator
+and add it via `app.add_middleware` instead.
+
+```python
+app = FastAPI()
+
+app.add_middleware(StarceptionMiddleware, debug=True)
+```
+
+See [FastAPI docs on middleware](https://fastapi.tiangolo.com/advanced/middleware/).
+
 ## Screenshot
 
 ![image](screenshot.png)
@@ -70,3 +83,7 @@ class WithHintError(Exception):
 ```
 
 ![image](hints.png)
+
+## Credentials
+
+* Look and feel inspired by [Phoenix Framework](https://www.phoenixframework.org/).

@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "starception"
 description = "Beautiful debugging page for Starlette apps."
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Alex Oleshkevich <alex.oleshkevich@gmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -25,7 +25,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8.0"
-starlette = "^0.18"
+starlette = "^0.19"
 MarkupSafe = "^2"
 Jinja2 = "^3.1.2"
 
@@ -37,6 +37,7 @@ black = "^22.6.0"
 mypy = "^v0.971"
 flake8 = "^4.0.1"
 uvicorn = "^0.18.2"
+fastapi = "^0.79.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
