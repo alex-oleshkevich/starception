@@ -23,6 +23,8 @@ poetry add starception
 Add it as the first middleware in to your app:
 
 ```python
+from starception import StarceptionMiddleware
+
 app = Starlette(
     middleware=[
         Middleware(StarceptionMiddleware, debug=True),
@@ -42,6 +44,8 @@ As this is pure ASGI middleware, you can use it with FastAPI. However, you canno
 and add it via `app.add_middleware` instead.
 
 ```python
+from starception import StarceptionMiddleware
+
 app = FastAPI()
 
 app.add_middleware(StarceptionMiddleware, debug=True)
