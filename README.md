@@ -31,6 +31,11 @@ app = Starlette(
 )
 ```
 
+Note, the middleware won't handle anything if `debug=False`,
+instead it will display plain string "Internal Server Error".
+Also, I would recommend to add it only for local development, as such error page,
+when enabled on prod by mistake, can expose sensitive data.
+
 ## Screenshot
 
 ![image](screenshot.png)
@@ -46,10 +51,11 @@ app = Starlette(
 * platform information
 * environment variables
 
+The middleware will automatically mask any value which key contains `key`, `secret`, `token`, `password`.
+
 ## Quick start
 
 See example application in `examples/` directory of this repository.
-
 
 ## Solution hints
 
