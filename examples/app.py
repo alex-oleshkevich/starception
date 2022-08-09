@@ -16,16 +16,16 @@ class WithHintError(Exception):
 
 
 def index_view(request: Request) -> typing.NoReturn:
-    request.state.token = 'hujokin'
-    request.app.state.app_token = 'app hujokin'
+    request.state.token = 'mytoken'
+    request.app.state.app_token = 'app mytoken'
     request.session['user_id'] = 1
     request.session['user_password'] = 'password'
     raise TypeError('Oops, something really went wrong...')
 
 
 def hint_view(request: Request) -> typing.NoReturn:
-    request.state.token = 'hujokin'
-    request.app.state.app_token = 'app hujokin'
+    request.state.token = 'mytoken'
+    request.app.state.app_token = 'app mytoken'
     request.session['user_id'] = 1
     request.session['user_password'] = 'password'
     raise WithHintError('Oops, something really went wrong...')
