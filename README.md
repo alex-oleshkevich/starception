@@ -1,6 +1,6 @@
 # Starception
 
-Beautifyl debugging page for Starlette apps.
+Beautiful debugging page for Starlette apps. Look and feel inspired by Elixir Phoenix.
 
 ![PyPI](https://img.shields.io/pypi/v/starception)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/alex-oleshkevich/starception/Lint)
@@ -20,10 +20,47 @@ pip install starception
 poetry add starception
 ```
 
+Add it as the first middleware in to your app:
+
+```python
+app = Starlette(
+    middleware=[
+        Middleware(StarceptionMiddleware, debug=True),
+        # other middleware here
+    ],
+)
+```
+
+## Screenshot
+
+![image](screenshot.png)
+
 ## Features
 
--   TODO
+* secrets masking
+* solution hints
+* code snippets
+* display request info: query, body, headers, cookies
+* session contents
+* request and app state
+* platform information
+* environment variables
 
 ## Quick start
 
 See example application in `examples/` directory of this repository.
+
+
+## Solution hints
+
+If exception class has `solution` attribute then its content will be used as a solution hint.
+
+```python
+class WithHintError(Exception):
+    solution = (
+        'The connection to the database cannot be established. '
+        'Either the database server is down or connection credentials are invalid.'
+    )
+```
+
+![image](hints.png)
