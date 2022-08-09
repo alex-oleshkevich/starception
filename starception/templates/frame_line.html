@@ -1,0 +1,26 @@
+{% set extra_css_class = '' %}
+
+{% if frame|is_vendor %}
+    {% set extra_css_class = extra_css_class ~ ' ' ~ ' vendor' %}
+{% endif %}
+
+{% if is_current %}
+    {% set extra_css_class = extra_css_class ~ ' ' ~ ' current' %}
+{% endif %}
+
+<div class="frame {{ extra_css_class }}" id="switch-{{ frame|frame_id }}" data-frame-index="{{ frame|frame_id }}">
+    <div class="dot {{ '' if frame|is_vendor else 'dot-red' }}"></div>
+    <div>
+        <span class="text-muted">
+            {% if not frame|is_vendor %}
+                {{ frame|package_name }} &middot;
+            {% endif %}
+        </span>
+        <span title="{{ frame.filename|replace('./', '') }}">
+            {{ frame.filename|relative_filename|replace('./', '') }}
+        <span>
+        <span class="text-muted">in</span>
+        <span class="symbol">{{ frame|symbol }}</span>
+        <span class="text-muted">at line</span> {{ frame.lineno }}
+    </div>
+</div>

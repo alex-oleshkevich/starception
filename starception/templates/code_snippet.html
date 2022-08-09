@@ -1,0 +1,36 @@
+{% set extra_css_class = '' %}
+
+{% if is_current %}
+    {% set extra_css_class = extra_css_class ~ ' ' ~ 'current' %}
+{% endif %}
+
+<div id="snippet-{{ frame|frame_id }}" class="snippet-wrapper{{ extra_css_class }}">
+    <div class="snippet">
+        <header>
+            <a class="open-uri" href="{open_path}">
+                {% set file_name = frame.filename|relative_filename|replace('./', '') %}
+                <span class="package-dir">{{ frame|package_dir }}</span>{{ file_name }}
+            </a>
+        </header>
+        <div>
+            {% for line in frame.code_context|default([]) %}
+                <pre class="line {{ 'highlight' if loop.index0 == frame.index else '' }}">
+                    <div class="line-number">{{ frame.lineno - frame.index + loop.index0 }}</div>
+                    <div class="code">{{ line|replace(' ', '&nbsp;')|safe }}</div>
+                </pre>
+            {% endfor %}
+        </div>
+        {% for var_name, var_value in frame.frame.f_locals|items %}
+            <dl class="locals">
+                <dt>{{ var_name }}</dt>
+                <dd>
+                    <pre>{{ var_value|format_variable|escape }}</pre>
+                </dd>
+            </dl>
+        {% endfor %}
+        <footer>
+            <div class="symbol">{{ frame|package_name }}.{{ frame|symbol }}</div>
+            <div class="package">{{ frame|package_name }}</div>
+        </footer>
+    </div>
+</div>

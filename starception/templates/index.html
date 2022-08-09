@@ -1,0 +1,53 @@
+{% import 'lib.html' as lib %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ exception_class }}: {{ error_message }} | Starception Debugger</title>
+    <meta name="viewport" content="width=device-width">
+    <style>
+        {% include 'styles.css' %}
+    </style>
+</head>
+<body>
+<header class="header">
+    <div>
+        <strong class="exception-class">{{ exception_class }}</strong>
+        at {{ request_method }} {{ request_path }}
+    </div>
+    <pre class="exception text-red">{{ error_message }}</pre>
+    {% if solution %}
+        <div class="solution">Hint: {{ solution }}</div>
+    {% endif %}
+</header>
+<main>
+    <section class="trace">
+        {% for frame in frames|reverse %}
+            {% with frame=frame, is_current=loop.first %}
+                {% include 'code_snippet.html' %}
+            {% endwith %}
+        {% endfor %}
+
+        <div class="frames">
+            {% for frame in frames|reverse %}
+                {% with frame=frame, is_current=loop.first %}
+                    {% include 'frame_line.html' %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </section>
+    <section class="bg-white">
+        {{ lib.details_row('Request', request_info, true) }}
+        {{ lib.details_row('Headers', request_headers) }}
+        {{ lib.details_row('Session', session) }}
+        {{ lib.details_row('Cookies', cookies) }}
+        {{ lib.details_row('Request state', request_state) }}
+        {{ lib.details_row('App state', app_state) }}
+        {{ lib.details_row('Platform', platform) }}
+        {{ lib.details_row('Environment', environment) }}
+    </section>
+</main>
+<script>
+    {% include 'scripts.js' %}
+</script>
+</body>
+</html>
