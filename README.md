@@ -3,7 +3,7 @@
 Beautiful exception page for Starlette and FastAPI apps.
 
 ![PyPI](https://img.shields.io/pypi/v/starception)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/alex-oleshkevich/starception/Lint)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/alex-oleshkevich/starception/Lint and test)
 ![GitHub](https://img.shields.io/github/license/alex-oleshkevich/starception)
 ![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/pypi/starception)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/starception)
