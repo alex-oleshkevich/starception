@@ -98,13 +98,11 @@ async def index_view(request: Request) -> typing.NoReturn:
 
 `starception` exports `starception.exception_handler(request, exc)` function, which you can use it directly in your
 framework.
-But keep in mind, Starlette will not call any custom exception handler in debug mode (it always uses built-in one).
+But keep in mind, Starlette will [not call](https://github.com/encode/starlette/issues/1802) any custom exception handler in debug mode (it always uses built-in one).
 
 The snipped below will not work as you expect (unfortunately).
 
 ```python
-
-
 from starlette.applications import Starlette
 
 from starception import exception_handler
