@@ -39,7 +39,7 @@ The middleware will automatically mask any value which key contains `key`, `secr
 
 ## Quick start
 
-See example application in [`examples/`](`examples/`) directory of this repository.
+See example application in [examples/](examples/) directory of this repository.
 
 ## Usage
 
