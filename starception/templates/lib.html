@@ -1,7 +1,7 @@
 {% macro details_row(title, items, open = false) %}
     <details {% if open %}open{% endif %}>
         <summary>{{ title }}</summary>
-        {% for label, value in items|items %}
+        {% for label, value in items.items() %}
             <dl>
                 <dt>{{ label }}</dt>
                 <dd>{{ value|mask_secrets(label) }}</dd>

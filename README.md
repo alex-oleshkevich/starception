@@ -47,7 +47,7 @@ To render a beautiful exception page you need to install a `StarceptionMiddlewar
 
 > The middleware will work only in debug mode so don't forget to set `debug=True` for local development.
 
-> Note, to catch at many exceptions as possible the middleware has to be the first one in the stack.
+> Note, to catch as many exceptions as possible the middleware has to be the first one in the stack.
 
 ```python
 import typing
@@ -76,7 +76,7 @@ app = Starlette(
 
 ### Integration with FastAPI
 
-Create a FastAPI exception handler and register it with your app:
+Attach `StarceptionMiddleware` middleware to your FastAPI application:
 
 ```python
 import typing
@@ -96,9 +96,10 @@ async def index_view(request: Request) -> typing.NoReturn:
 
 ### Integration with other frameworks
 
-`starception` exports `starception.exception_handler(request, exc)` function, which you can use it directly in your
+`starception` exports `starception.exception_handler(request, exc)` function, which you can use in your
 framework.
-But keep in mind, Starlette will [not call](https://github.com/encode/starlette/issues/1802) any custom exception handler in debug mode (it always uses built-in one).
+But keep in mind, Starlette will [not call](https://github.com/encode/starlette/issues/1802) any custom exception handler
+in debug mode (it always uses built-in one).
 
 The snipped below will not work as you expect (unfortunately).
 
