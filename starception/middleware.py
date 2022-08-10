@@ -21,7 +21,7 @@ class StarceptionMiddleware:
         self.app = app
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
-        if scope["type"] != "http":
+        if scope["type"] != "http":  # pragma: nocover
             await self.app(scope, receive, send)
             return
 
@@ -30,7 +30,7 @@ class StarceptionMiddleware:
         async def _send(message: Message) -> None:
             nonlocal response_started, send
 
-            if message["type"] == "http.response.start":
+            if message["type"] == "http.response.start":  # pragma: nocover
                 response_started = True
             await send(message)
 
