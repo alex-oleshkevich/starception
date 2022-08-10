@@ -85,13 +85,14 @@ from starception import exception_handler
 app = FastAPI()
 
 
+@app.exception_handler(Exception)
+def custom_exception_handler(request: Request, exc: Exception) -> Response:
+    return exception_handler(request, exc, debug=True)
+
+
 @app.route('/')
 async def index_view(request: Request) -> typing.NoReturn:
     raise TypeError('Oops, something really went wrong...')
-
-
-def custom_exception_handler(request: Request, exc: Exception) -> Response:
-    return exception_handler(request, exc, debug=True)
 ```
 
 ## Solution hints
