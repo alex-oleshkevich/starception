@@ -43,24 +43,21 @@ See example application in [examples/](examples/) directory of this repository.
 
 ## Usage
 
-To render a beautiful exception page you need to install a custom error handler to your application.
-The error handler must be registered to `Exception` class or to `500` status code.
+To render a beautiful exception page you need to install a `StarceptionMiddleware` middleware to your application.
 
-To create the handler use `create_exception_handler(debug: bool)` function.
+> The middleware will work only in debug mode so don't forget to set `debug=True` for local development.
 
-> Note, the handler won't do anything if `debug=False`,
-> instead it will display a plain string "Internal Server Error".
-> Also, I would recommend to add it only for local development, as such error page,
-> when enabled on production by mistake, can expose sensitive data.
+> Note, to catch at many exceptions as possible the middleware has to be the first one in the stack.
 
 ```python
 import typing
 
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.routing import Route
 
-from starception import create_exception_handler
+from starception import StarceptionMiddleware
 
 
 async def index_view(request: Request) -> typing.NoReturn:
@@ -68,8 +65,12 @@ async def index_view(request: Request) -> typing.NoReturn:
 
 
 app = Starlette(
+    debug=True,
     routes=[Route('/', index_view)],
-    exception_handlers={Exception: create_exception_handler(debug=True)}
+    middleware=[
+        Middleware(StarceptionMiddleware),
+        # other middleware go here
+    ],
 )
 ```
 
@@ -79,15 +80,13 @@ Create a FastAPI exception handler and register it with your app:
 
 ```python
 import typing
-from fastapi import FastAPI, Request, Response
-from starception import exception_handler
 
-app = FastAPI()
+from fastapi import FastAPI, Request
 
+from starception import StarceptionMiddleware
 
-@app.exception_handler(Exception)
-def custom_exception_handler(request: Request, exc: Exception) -> Response:
-    return exception_handler(request, exc, debug=True)
+app = FastAPI(debug=True)
+app.add_middleware(StarceptionMiddleware)  # must be the first one!
 
 
 @app.route('/')

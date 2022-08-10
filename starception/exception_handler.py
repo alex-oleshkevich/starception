@@ -1,4 +1,3 @@
-import functools
 import hashlib
 import html
 import inspect
@@ -90,16 +89,6 @@ def mask_secrets(value: str, key: str) -> str:
     return value
 
 
-EDITORS = {'pycharm': 'pycharm://open?file={path}&line={line}'}
-
-
-def generate_file_uri(path: str, line: int, editor: str) -> str:
-    uri = EDITORS.get(editor, '').format(path=path, line=line)
-    if not uri:
-        uri = 'file://' + path
-    return uri
-
-
 jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__))
 jinja.filters.update(
     {
@@ -115,24 +104,13 @@ jinja.filters.update(
 )
 
 
-def create_exception_handler(debug: bool) -> typing.Callable[[Request, Exception], Response]:
-    return functools.partial(exception_handler, debug=debug)
-
-
-def exception_handler(request: Request, exc: Exception, debug: bool) -> Response:
-    return debug_response(request, exc) if debug else error_response(request, exc)
-
-
-def error_response(request: Request, exc: Exception) -> Response:
-    return PlainTextResponse("Internal Server Error", status_code=500)
-
-
-def debug_response(request: Request, exc: Exception) -> Response:
+def exception_handler(request: Request, exc: Exception) -> Response:
     accept = request.headers.get("accept", "")
 
     if "text/html" in accept:
         content = generate_html(request, exc)
         return HTMLResponse(content, status_code=500)
+
     content = generate_plain_text(exc)
     return PlainTextResponse(content, status_code=500)
 

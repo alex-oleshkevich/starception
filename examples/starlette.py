@@ -1,9 +1,10 @@
 import typing
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.routing import Route
 
-from starception import create_exception_handler
+from starception import StarceptionMiddleware
 
 
 class WithHintError(Exception):
@@ -24,8 +25,7 @@ def hint_view(request: Request) -> typing.NoReturn:
 
 
 app = Starlette(
+    debug=True,
     routes=[Route('/', index_view), Route('/hint', hint_view)],
-    exception_handlers={
-        Exception: create_exception_handler(debug=True),
-    },
+    middleware=[Middleware(StarceptionMiddleware)],
 )
