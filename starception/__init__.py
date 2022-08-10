@@ -1,3 +1,3 @@
-from .middleware import StarceptionMiddleware
+from starception.exception_handler import create_exception_handler, exception_handler
 
-__all__ = ['StarceptionMiddleware']
+__all__ = ['create_exception_handler', 'exception_handler']

@@ -5,7 +5,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
 from starlette.routing import Route
 
-from starception.middleware import StarceptionMiddleware
+from starception import create_exception_handler
 
 
 class WithHintError(Exception):
@@ -34,7 +34,9 @@ def hint_view(request: Request) -> typing.NoReturn:
 app = Starlette(
     routes=[Route('/', index_view), Route('/hint', hint_view)],
     middleware=[
-        Middleware(StarceptionMiddleware, debug=True),
         Middleware(SessionMiddleware, secret_key=True),
     ],
+    exception_handlers={
+        Exception: create_exception_handler(debug=True),
+    },
 )

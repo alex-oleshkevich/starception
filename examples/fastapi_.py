@@ -1,12 +1,14 @@
 import typing
-from fastapi import FastAPI
-from starlette.requests import Request
+from fastapi import FastAPI, Request, Response
 
-from starception.middleware import StarceptionMiddleware
+from starception import exception_handler
 
 app = FastAPI()
 
-app.add_middleware(StarceptionMiddleware, debug=True)
+
+@app.exception_handler(Exception)
+def custom_exception_handler(request: Request, exc: Exception) -> Response:
+    return exception_handler(request, exc, debug=True)
 
 
 @app.route('/')

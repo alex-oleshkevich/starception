@@ -13,7 +13,7 @@
             </a>
         </header>
         <div>
-            {% for line in frame.code_context|default([]) %}
+            {% for line in frame.code_context|default([], true) %}
                 <pre class="line {{ 'highlight' if loop.index0 == frame.index else '' }}">
                     <div class="line-number">{{ frame.lineno - frame.index + loop.index0 }}</div>
                     <div class="code">{{ line|replace(' ', '&nbsp;')|safe }}</div>

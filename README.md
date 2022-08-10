@@ -1,6 +1,6 @@
 # Starception
 
-Beautiful debugging page for Starlette apps implemented as ASGI middleware.
+Beautiful exception page for Starlette and FastAPI apps.
 
 ![PyPI](https://img.shields.io/pypi/v/starception)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/alex-oleshkevich/starception/Lint)
@@ -19,35 +19,6 @@ pip install starception
 # or
 poetry add starception
 ```
-
-Add it as the first middleware in to your app:
-
-```python
-app = Starlette(
-    middleware=[
-        Middleware(StarceptionMiddleware, debug=True),
-        # other middleware here
-    ],
-)
-```
-
-Note, the middleware won't handle anything if `debug=False`,
-instead it will display plain string "Internal Server Error".
-Also, I would recommend to add it only for local development, as such error page,
-when enabled on prod by mistake, can expose sensitive data.
-
-### Usage with FastAPI
-
-As this is pure ASGI middleware, you can use it with FastAPI. However, you cannot use `app.middleware` decorator
-and add it via `app.add_middleware` instead.
-
-```python
-app = FastAPI()
-
-app.add_middleware(StarceptionMiddleware, debug=True)
-```
-
-See [FastAPI docs on middleware](https://fastapi.tiangolo.com/advanced/middleware/).
 
 ## Screenshot
 
@@ -68,7 +39,60 @@ The middleware will automatically mask any value which key contains `key`, `secr
 
 ## Quick start
 
-See example application in `examples/` directory of this repository.
+See example application in [`examples/`](`examples/`) directory of this repository.
+
+## Usage
+
+To render a beautiful exception page you need to install a custom error handler to your application.
+The error handler must be registered to `Exception` class or to `500` status code.
+
+To create the handler use `create_exception_handler(debug: bool)` function.
+
+> Note, the handler won't do anything if `debug=False`,
+> instead it will display a plain string "Internal Server Error".
+> Also, I would recommend to add it only for local development, as such error page,
+> when enabled on production by mistake, can expose sensitive data.
+
+```python
+import typing
+
+from starlette.applications import Starlette
+from starlette.requests import Request
+from starlette.routing import Route
+
+from starception import create_exception_handler
+
+
+async def index_view(request: Request) -> typing.NoReturn:
+    raise TypeError('Oops, something really went wrong...')
+
+
+app = Starlette(
+    routes=[Route('/', index_view)],
+    exception_handlers={Exception: create_exception_handler(debug=True)}
+)
+```
+
+### Integration with FastAPI
+
+Create a FastAPI exception handler and register it with your app:
+
+```python
+import typing
+from fastapi import FastAPI, Request, Response
+from starception import exception_handler
+
+app = FastAPI()
+
+
+@app.route('/')
+async def index_view(request: Request) -> typing.NoReturn:
+    raise TypeError('Oops, something really went wrong...')
+
+
+def custom_exception_handler(request: Request, exc: Exception) -> Response:
+    return exception_handler(request, exc, debug=True)
+```
 
 ## Solution hints
 
