@@ -94,6 +94,27 @@ async def index_view(request: Request) -> typing.NoReturn:
     raise TypeError('Oops, something really went wrong...')
 ```
 
+### Integration with other frameworks
+
+`starception` exports `starception.exception_handler(request, exc)` function, which you can use it directly in your
+framework.
+But keep in mind, Starlette will not call any custom exception handler in debug mode (it always uses built-in one).
+
+The snipped below will not work as you expect (unfortunately).
+
+```python
+
+
+from starlette.applications import Starlette
+
+from starception import exception_handler
+
+app = Starlette(
+    debug=True,
+    exception_handlers={Exception: exception_handler}
+)
+```
+
 ## Solution hints
 
 If exception class has `solution` attribute then its content will be used as a solution hint.
