@@ -403,7 +403,7 @@ standard = ["websockets (>=10.0)", "httptools (>=0.4.0)", "watchfiles (>=0.13)",
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.0"
-content-hash = "f9ce9e9b58ec507d9536d46f528b98fddd4e1af1164d6c1af968554321ab23a3"
+content-hash = "ebc3f2548eb4d3612392539aac05252c8bfe23541a5702c94c6ae89a74076b84"
 
 [metadata.files]
 anyio = [

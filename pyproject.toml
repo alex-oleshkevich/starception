@@ -25,7 +25,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8.0"
-starlette = "^0.19"
+starlette = "^0"
 MarkupSafe = "^2"
 Jinja2 = "^3.1.2"
 
