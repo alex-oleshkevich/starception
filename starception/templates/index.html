@@ -14,7 +14,7 @@
         <strong class="exception-class">{{ exception_class }}</strong>
         at {{ request_method }} {{ request_path }}
     </div>
-    <pre class="exception text-red">{{ error_message }}</pre>
+    <div class="exception text-red">{{ error_message|e }}</div>
     {% if solution %}
         <div class="solution">Hint: {{ solution }}</div>
     {% endif %}

@@ -7,16 +7,16 @@
 <div id="snippet-{{ frame|frame_id }}" class="snippet-wrapper{{ extra_css_class }}">
     <div class="snippet">
         <header>
-            <a class="open-uri" href="{open_path}">
+            <span>
                 {% set file_name = frame.filename|relative_filename|replace('./', '') %}
                 <span class="package-dir">{{ frame|package_dir }}</span>{{ file_name }}
-            </a>
+            </span>
         </header>
         <div>
             {% for line in frame.code_context|default([], true) %}
                 <pre class="line {{ 'highlight' if loop.index0 == frame.index else '' }}">
                     <div class="line-number">{{ frame.lineno - frame.index + loop.index0 }}</div>
-                    <div class="code">{{ line|replace(' ', '&nbsp;')|safe }}</div>
+                    <div class="code">{{ line|escape }}</div>
                 </pre>
             {% endfor %}
         </div>

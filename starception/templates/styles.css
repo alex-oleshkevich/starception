@@ -51,6 +51,7 @@ pre {
     font-size: 1.5rem;
     margin-top: 0.625rem;
     color: var(--red);
+    font-family: monospace;
 }
 
 .solution {
@@ -129,6 +130,7 @@ section.trace {
 
 .snippet .code {
     flex: auto;
+    white-space: pre
 }
 
 .frames .frame {
