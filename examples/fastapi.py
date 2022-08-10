@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 
 from starception import StarceptionMiddleware
 
-app = FastAPI(debug=False)
+app = FastAPI(debug=True)
 app.add_middleware(StarceptionMiddleware)
 
 
