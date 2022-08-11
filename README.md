@@ -8,7 +8,6 @@ Beautiful exception page for Starlette and FastAPI apps.
 ![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/pypi/starception)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/starception)
 ![GitHub Release Date](https://img.shields.io/github/release-date/alex-oleshkevich/starception)
-![Lines of code](https://img.shields.io/tokei/lines/github/alex-oleshkevich/starception)
 
 ## Installation
 
