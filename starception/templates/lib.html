@@ -4,7 +4,7 @@
         {% for label, value in items.items() %}
             <dl>
                 <dt>{{ label }}</dt>
-                <dd>{{ value|mask_secrets(label) }}</dd>
+                <dd>{{ value|mask_secrets(label)|escape }}</dd>
             </dl>
         {% else %}
             <dl>
