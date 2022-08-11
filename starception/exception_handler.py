@@ -8,6 +8,7 @@ import traceback
 import typing
 from markupsafe import Markup
 from pprint import pformat
+from starlette.datastructures import URL
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
 
@@ -75,8 +76,18 @@ def format_variable(var_value: typing.Any) -> str:
         return repr(ex)
 
 
+def _hide_url_secrets(value: str) -> str:
+    url = URL(value)
+    if url.password:
+        url = url.replace(password='*' * 8)
+    return str(url)
+
+
 def mask_secrets(value: str, key: str) -> str:
     key = key.lower()
+    if key.endswith('_url'):
+        return _hide_url_secrets(value)
+
     if any(
         [
             "key" in key,
@@ -136,7 +147,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 7) -> str:
                 "Path params": Markup(
                     "<br>".join(
                         [
-                            f'<span class="text-muted">{k}</span> = {html.escape(str(v))}'
+                            f'<span class="text-muted">{k}</span> = {html.escape(mask_secrets(str(v), k))}'
                             for k, v in request.path_params.items()
                         ]
                     )
@@ -144,7 +155,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 7) -> str:
                 "Query params": Markup(
                     "<br>".join(
                         [
-                            f'<span class="text-muted">{k}</span> = {html.escape(str(v))}'
+                            f'<span class="text-muted">{k}</span> = {html.escape(mask_secrets(str(v), k))}'
                             for k, v in request.query_params.items()
                         ]
                     )

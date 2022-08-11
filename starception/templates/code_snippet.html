@@ -24,7 +24,7 @@
             <dl class="locals">
                 <dt>{{ var_name }}</dt>
                 <dd>
-                    <pre>{{ var_value|format_variable|escape }}</pre>
+                    <pre>{{ var_value|format_variable|mask_secrets(var_name)|escape }}</pre>
                 </dd>
             </dl>
         {% endfor %}
