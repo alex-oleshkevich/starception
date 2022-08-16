@@ -18,3 +18,10 @@ Array.from(document.querySelectorAll('[id^="switch"]')).forEach(function (el) {
         el.classList.add('current');
     });
 });
+
+
+Array.from(document.querySelectorAll('[data-reveal]')).forEach(function (el) {
+    el.addEventListener('click', function () {
+        el.innerText = el.dataset.reveal;
+    });
+});

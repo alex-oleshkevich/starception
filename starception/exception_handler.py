@@ -53,7 +53,10 @@ def get_package_name(frame: inspect.FrameInfo) -> str:
 def get_symbol(frame: inspect.FrameInfo) -> str:
     symbol = ""
     if "self" in frame.frame.f_locals:
-        symbol = frame.frame.f_locals["self"].__class__.__name__
+        try:
+            symbol = type(frame.frame.f_locals["self"]).__name__
+        except Exception:
+            return 'n/a'
 
     if "cls" in frame.frame.f_locals:
         symbol = frame.frame.f_locals["cls"].__name__
@@ -96,7 +99,11 @@ def mask_secrets(value: str, key: str) -> str:
             "secret" in key,
         ]
     ):
-        return "*" * 8
+        return Markup(
+            '<span data-reveal="{value}" style="cursor: pointer">{stars} <i>(click to reveal)</i></span> '.format(
+                stars="*" * 8, value=value
+            )
+        )
     return value
 
 
@@ -165,7 +172,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 7) -> str:
             },
             'request_headers': request.headers,
             'request_state': {k: v for k, v in request.state._state.items()},
-            'session': request.session if 'session' in request.scope else {},
+            'session': _get_session_info(request),
             'cookies': request.cookies,
             'app_state': {k: v for k, v in request.app.state._state.items()} if 'app' in request.scope else {},
             'platform': {
@@ -178,3 +185,10 @@ def generate_html(request: Request, exc: Exception, limit: int = 7) -> str:
             'solution': getattr(exc, 'solution', None),
         }
     )
+
+
+def _get_session_info(request: Request) -> typing.Dict[str, typing.Any]:
+    try:
+        return dict(request.session if 'session' in request.scope else {})
+    except Exception:
+        return {}
