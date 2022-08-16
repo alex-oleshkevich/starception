@@ -28,6 +28,11 @@
         {% endfor %}
 
         <div class="frames">
+            <div style="margin-bottom: 10px">
+                <label class="checkbox">
+                    <input type="checkbox" id="vendor-frames"> Hide vendor frames
+                </label>
+            </div>
             {% for frame in frames|reverse %}
                 {% with frame=frame, is_current=loop.first %}
                     {% include 'frame_line.html' %}

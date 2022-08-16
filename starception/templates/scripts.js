@@ -25,3 +25,14 @@ Array.from(document.querySelectorAll('[data-reveal]')).forEach(function (el) {
         el.innerText = el.dataset.reveal;
     });
 });
+
+
+document.querySelector('#vendor-frames').addEventListener('click', function (e) {
+    Array.from(document.querySelectorAll('.frames .vendor')).forEach(function (frame) {
+        if (e.target.checked) {
+            frame.classList.add('hidden');
+        } else {
+            frame.classList.remove('hidden');
+        }
+    });
+});
