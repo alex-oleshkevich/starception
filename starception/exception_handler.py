@@ -58,7 +58,7 @@ def get_symbol(frame: inspect.FrameInfo) -> str:
         except Exception:
             return 'n/a'
 
-    if "cls" in frame.frame.f_locals:
+    if "cls" in frame.frame.f_locals and frame.frame.f_locals["cls"]:
         symbol = frame.frame.f_locals["cls"].__name__
 
     # if we cannot detect class name then just a method name will be rendered
