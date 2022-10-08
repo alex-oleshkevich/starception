@@ -3,6 +3,7 @@ import typing
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.requests import Request
+from starlette.responses import Response
 from starlette.routing import Route
 from starlette.templating import Jinja2Templates
 
@@ -41,15 +42,15 @@ def hint_view(request: Request) -> typing.NoReturn:
     raise WithHintError('Oops, something really went wrong...')
 
 
-def template_view(request: Request) -> typing.NoReturn:
+def template_view(request: Request) -> Response:
     return templates.TemplateResponse('index.html', {'request': request})
 
 
-def javascript_view(request: Request) -> typing.NoReturn:
+def javascript_view(request: Request) -> Response:
     return templates.TemplateResponse('jstest.js', {'request': request})
 
 
-def css_view(request: Request) -> typing.NoReturn:
+def css_view(request: Request) -> Response:
     return templates.TemplateResponse('csstest.css', {'request': request})
 
 
