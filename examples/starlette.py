@@ -1,10 +1,15 @@
+import os.path
 import typing
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.routing import Route
+from starlette.templating import Jinja2Templates
 
 from starception import StarceptionMiddleware
+
+this_dir = os.path.dirname(__file__)
+templates = Jinja2Templates(os.path.join(this_dir, 'templates'))
 
 
 class WithHintError(Exception):
@@ -36,12 +41,27 @@ def hint_view(request: Request) -> typing.NoReturn:
     raise WithHintError('Oops, something really went wrong...')
 
 
+def template_view(request: Request) -> typing.NoReturn:
+    return templates.TemplateResponse('index.html', {'request': request})
+
+
+def javascript_view(request: Request) -> typing.NoReturn:
+    return templates.TemplateResponse('jstest.js', {'request': request})
+
+
+def css_view(request: Request) -> typing.NoReturn:
+    return templates.TemplateResponse('csstest.css', {'request': request})
+
+
 app = Starlette(
     debug=True,
     routes=[
         Route('/', index_view),
-        Route('/chain', chain_view),
         Route('/hint', hint_view),
+        Route('/chain', chain_view),
+        Route('/css', css_view),
+        Route('/template', template_view),
+        Route('/javascript', javascript_view),
     ],
     middleware=[Middleware(StarceptionMiddleware)],
 )

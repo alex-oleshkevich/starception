@@ -109,13 +109,23 @@ def mask_secrets(value: str, key: str) -> str:
     return value
 
 
-def highlight(value: str) -> str:
+def highlight(value: str, filename: str) -> str:
     try:
         from pygments import highlight
         from pygments.formatters import HtmlFormatter
-        from pygments.lexers import PythonLexer
+        from pygments.lexers import CssLexer, HtmlLexer, JavascriptLexer, PythonLexer
 
-        return highlight(value, PythonLexer(), HtmlFormatter(noclasses=True, nowrap=True))  # type: ignore
+        *_, extension = os.path.splitext(filename)
+        mapping = {
+            '.py': PythonLexer(),
+            '.htm': HtmlLexer(),
+            '.html': HtmlLexer(),
+            '.css': CssLexer(),
+            '.js': JavascriptLexer(),
+        }
+        if lexer := mapping.get(extension):
+            return highlight(value, lexer, HtmlFormatter(noclasses=True, nowrap=True))  # type: ignore
+        return value
     except ImportError:
         return value
 
@@ -186,7 +196,6 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
             'stack': stack,
             'request_method': request.method,
             'request_path': request.url.path,
-            # 'frames': inspect.getinnerframes(exc.__traceback__, limit) if exc.__traceback__ else [],
             'request_info': {
                 "Method": request.method,
                 "Path": request.url.path,

@@ -1,0 +1,27 @@
+.section-header:hover {
+    cursor: pointer;
+    background: var(--gray-lighter);
+}
+
+.exception-class {
+    color: var(--red);
+}
+
+/* {% unknown tag %}
+
+.exception {
+    font-size: 1.5rem;
+    margin-top: 0.625rem;
+    color: var(--red);
+    font-family: monospace;
+}
+
+.solution {
+    margin-top: 3rem;
+    color: var(--green);
+    font-size: 1.25rem;
+    padding: 1rem;
+    border-radius: .25rem;
+    border: 1px solid var(--green-darker);
+    background-color: var(--green-lightest);
+}
