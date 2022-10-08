@@ -9,7 +9,9 @@
         <header>
             <span>
                 {% set file_name = frame.filename|relative_filename|replace('./', '') %}
-                <span class="package-dir">{{ frame|package_dir }}</span>{{ file_name }}
+                <a href="{{ frame.filename|to_ide_link(frame.lineno) }}">
+                    <span class="package-dir">{{ frame|package_dir }}</span>{{ file_name }}
+                </a>
             </span>
         </header>
         <div>

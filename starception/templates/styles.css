@@ -52,6 +52,7 @@ pre {
     color: var(--gray-light);
     margin-bottom: 24px;
 }
+
 .section-header:hover {
     cursor: pointer;
     background: var(--gray-lighter);
@@ -106,6 +107,15 @@ section.trace {
 .snippet header {
     padding: 16px 0;
     border-bottom: 1px solid var(--gray-lightest);
+}
+
+.snippet header a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.snippet header a:hover {
+    text-decoration: underline;
 }
 
 .snippet footer {
@@ -262,7 +272,7 @@ dd {
 }
 
 .hidden {
-    display: none!important;
+    display: none !important;
 }
 
 .checkbox {

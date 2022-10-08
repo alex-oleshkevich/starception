@@ -14,6 +14,39 @@ from starlette.datastructures import URL
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
 
+_editor: str = 'none'
+open_link_templates: typing.Dict[str, str] = {
+    'none': 'file://{path}',
+    'vscode': 'vscode://file/{path}:{lineno}',
+}
+
+
+def set_editor(name: str) -> None:
+    """
+    Set code editor.
+
+    We will use it to generate file open links.
+    """
+    global _editor
+    _editor = name
+
+
+def add_link_template(editor: str, template: str) -> None:
+    """
+    Add open file link template. The template accepts two format keys: path and
+    lineno.
+
+    Example:
+        add_link_template('vscode', 'vscode://file/{path}:{lineno}')
+    """
+    open_link_templates[editor] = template
+
+
+def to_ide_link(path: str, lineno: int) -> str:
+    """Generate open file link for current editor."""
+    template = open_link_templates.get(_editor, 'none')
+    return template.format(path=path, lineno=lineno)
+
 
 def get_relative_filename(path: str) -> str:
     for sys_path in reversed(sorted(sys.path)):
@@ -137,6 +170,7 @@ jinja.filters.update(
         'frame_id': frame_id,
         'is_vendor': is_vendor,
         'highlight': highlight,
+        'to_ide_link': to_ide_link,
         'mask_secrets': mask_secrets,
         'package_dir': get_package_dir,
         'package_name': get_package_name,
