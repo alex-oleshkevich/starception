@@ -25,7 +25,7 @@ def set_editor(name: str) -> None:
     """
     Set code editor.
 
-    We will use it to generate file open links.
+    We will use it to generate file open links. Built-in editors: vscode.
     """
     global _editor
     _editor = name

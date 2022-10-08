@@ -33,6 +33,9 @@ poetry add starception
 * request and app state
 * platform information
 * environment variables
+* syntax highlighing
+* open paths in editor (vscode only)
+* exception chains
 
 The middleware will automatically mask any value which key contains `key`, `secret`, `token`, `password`.
 
@@ -97,7 +100,8 @@ async def index_view(request: Request) -> typing.NoReturn:
 
 `starception` exports `starception.exception_handler(request, exc)` function, which you can use in your
 framework.
-But keep in mind, Starlette will [not call](https://github.com/encode/starlette/issues/1802) any custom exception handler
+But keep in mind, Starlette will [not call](https://github.com/encode/starlette/issues/1802) any custom exception
+handler
 in debug mode (it always uses built-in one).
 
 The snipped below will not work as you expect (unfortunately).
@@ -126,6 +130,32 @@ class WithHintError(Exception):
 ```
 
 ![image](hints.png)
+
+## Opening files in editor
+
+Set your current editor to open paths in your editor/IDE.
+
+```python
+from starception import set_editor
+
+set_editor('vscode')
+```
+
+![image](link.png)
+
+
+> Note, currently only VSCode supported. If you know how to integrate other editors - please PR
+
+### Registering link templates
+
+If your editor is not supported, you can add it by calling `add_link_template` and then selecting it with `set_editor`.
+
+```python
+from starception import set_editor, add_link_template
+
+add_link_template('vscode', 'vscode://file/{path}:{lineno}')
+set_editor('vscode')
+```
 
 ## Credentials
 
