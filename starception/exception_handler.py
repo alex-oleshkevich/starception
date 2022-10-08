@@ -137,7 +137,7 @@ def generate_plain_text(exc: Exception) -> str:
     return "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
 
 
-def generate_html(request: Request, exc: Exception, limit: int = 7) -> str:
+def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
     traceback_obj = traceback.TracebackException.from_exception(exc, capture_locals=True)
 
     template = jinja.get_template('index.html')
