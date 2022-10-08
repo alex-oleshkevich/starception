@@ -124,7 +124,7 @@ def highlight(value: str, filename: str) -> str:
             '.js': JavascriptLexer(),
         }
         if lexer := mapping.get(extension):
-            return highlight(value, lexer, HtmlFormatter(noclasses=True, nowrap=True))  # type: ignore
+            return highlight(value, lexer, HtmlFormatter(noclasses=True, nowrap=True, style='xcode'))  # type: ignore
         return value
     except ImportError:
         return value
