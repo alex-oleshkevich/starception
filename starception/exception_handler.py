@@ -1,3 +1,5 @@
+import dataclasses
+
 import hashlib
 import html
 import inspect
@@ -149,17 +151,42 @@ def generate_plain_text(exc: Exception) -> str:
     return "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
 
 
+@dataclasses.dataclass
+class StackItem:
+    exc: Exception
+    frames: typing.List[inspect.FrameInfo]
+    solution: str
+
+
 def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
     traceback_obj = traceback.TracebackException.from_exception(exc, capture_locals=True)
+    stack = [
+        StackItem(
+            exc=exc,
+            solution=getattr(exc, 'solution', ''),
+            frames=inspect.getinnerframes(exc.__traceback__, limit) if exc.__traceback__ else [],
+        )
+    ]
+    exception = exc
+    while cause := getattr(exception, '__cause__'):
+        stack.append(
+            StackItem(
+                exc=cause,
+                solution=getattr(cause, 'solution', ''),
+                frames=inspect.getinnerframes(cause.__traceback__, limit) if cause.__traceback__ else [],
+            )
+        )
+        exception = cause
 
     template = jinja.get_template('index.html')
     return template.render(
         {
             'exception_class': format_qual_name(traceback_obj.exc_type),
             'error_message': str(exc) or '""',
+            'stack': stack,
             'request_method': request.method,
             'request_path': request.url.path,
-            'frames': inspect.getinnerframes(exc.__traceback__, limit) if exc.__traceback__ else [],
+            # 'frames': inspect.getinnerframes(exc.__traceback__, limit) if exc.__traceback__ else [],
             'request_info': {
                 "Method": request.method,
                 "Path": request.url.path,

@@ -43,6 +43,20 @@ pre {
     color: var(--gray-light);
 }
 
+.request-info {
+    margin-top: 48px;
+}
+
+.section-header {
+    padding: 8px 48px;
+    color: var(--gray-light);
+    margin-bottom: 24px;
+}
+.section-header:hover {
+    cursor: pointer;
+    background: var(--gray-lighter);
+}
+
 .exception-class {
     color: var(--red);
 }
@@ -255,4 +269,8 @@ dd {
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.collapsed {
+    display: none;
 }

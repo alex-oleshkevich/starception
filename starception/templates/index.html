@@ -20,27 +20,49 @@
     {% endif %}
 </header>
 <main>
-    <section class="trace">
-        {% for frame in frames|reverse %}
-            {% with frame=frame, is_current=loop.first %}
-                {% include 'code_snippet.html' %}
-            {% endwith %}
-        {% endfor %}
+    <!-- exception block -->
+    {% for stack_item in stack %}
+        {% if loop.index0 > 0 %}
+            <header class="section-header" data-toggle-trace="" data-trace-index="{{ loop.index0 }}">
+                Caused by
+                <div>
+                    <div class="exception text-red">{{ stack_item.exc|e }}</div>
+                </div>
+            </header>
+        {% endif %}
+        <div data-trace-target="{{ loop.index0 }}" {% if loop.index0 > 0 %} class="collapsed"{% endif %}>
+            {% if loop.index0 > 0 %}
+                <div style="padding: 0 48px">
+                    {% if stack_item.solution %}
+                        <div class="solution" style="margin-top: 8px">Hint: {{ stack_item.solution }}</div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            <section class="trace">
+                {% for frame in stack_item.frames|reverse %}
+                    {% with frame=frame, is_current=loop.first %}
+                        {% include 'code_snippet.html' %}
+                    {% endwith %}
+                {% endfor %}
 
-        <div class="frames">
-            <div style="margin-bottom: 10px">
-                <label class="checkbox">
-                    <input type="checkbox" id="vendor-frames"> Hide vendor frames
-                </label>
-            </div>
-            {% for frame in frames|reverse %}
-                {% with frame=frame, is_current=loop.first %}
-                    {% include 'frame_line.html' %}
-                {% endwith %}
-            {% endfor %}
+                <div class="frames">
+                    <div style="margin-bottom: 10px">
+                        <label class="checkbox">
+                            <input type="checkbox" id="vendor-frames"> Hide vendor frames
+                        </label>
+                    </div>
+                    {% for frame in stack_item.frames|reverse %}
+                        {% with frame=frame, is_current=loop.first %}
+                            {% include 'frame_line.html' %}
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+            </section>
         </div>
-    </section>
-    <section class="bg-white">
+    {% endfor %}
+
+    <!-- request information -->
+    <section class="bg-white request-info">
         {{ lib.details_row('Request', request_info, true) }}
         {{ lib.details_row('Headers', request_headers) }}
         {{ lib.details_row('Session', session) }}

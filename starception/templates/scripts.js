@@ -36,3 +36,15 @@ document.querySelector('#vendor-frames').addEventListener('click', function (e) 
         }
     });
 });
+
+document.querySelectorAll('[data-toggle-trace]').forEach(el => {
+    el.addEventListener('click', () => {
+        const index = el.dataset.traceIndex;
+        const target = document.querySelector(`[data-trace-target="${index}"]`);
+        if (target.classList.contains('collapsed')) {
+            target.classList.remove('collapsed');
+        } else {
+            target.classList.add('collapsed');
+        }
+    });
+})
