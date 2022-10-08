@@ -20,6 +20,7 @@ class WithHintError(Exception):
 
 
 def index_view(request: Request) -> typing.NoReturn:
+    token = 'mytoken'  # noqa
     request.state.token = 'mytoken'
     request.app.state.app_token = 'app mytoken'
     raise ValueError('This is the first cause')
