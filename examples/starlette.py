@@ -6,7 +6,7 @@ from starlette.responses import Response
 from starlette.routing import Route
 from starlette.templating import Jinja2Templates
 
-from starception.exception_handler import install_error_handler
+from starception import install_error_handler, set_theme
 
 this_dir = os.path.dirname(__file__)
 templates = Jinja2Templates(os.path.join(this_dir, 'templates'))
@@ -54,6 +54,7 @@ def css_view(request: Request) -> Response:
     return templates.TemplateResponse('csstest.css', {'request': request})
 
 
+set_theme('dark')
 install_error_handler()
 app = Starlette(
     debug=True,

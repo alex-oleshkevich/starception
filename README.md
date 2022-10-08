@@ -33,9 +33,10 @@ poetry add starception
 * request and app state
 * platform information
 * environment variables
-* syntax highlighing
+* syntax highlight
 * open paths in editor (vscode only)
 * exception chains
+* dark theme
 
 The middleware will automatically mask any value which key contains `key`, `secret`, `token`, `password`.
 
@@ -172,6 +173,21 @@ from starception import set_editor, add_link_template
 add_link_template('vscode', 'vscode://file/{path}:{lineno}')
 set_editor('vscode')
 ```
+
+## Dark theme
+
+Switch between light/dark themes using `set_theme` utility.
+> Currently, we use `pygments` for syntax highlighting, therefore theme must be set in the code.
+> In future releases we may highlight code on client side, and then we can make Starception to follow your browser's
+> theme.
+
+```python
+from starception import set_theme
+
+set_theme('dark')
+```
+
+![image](dark.png)
 
 ## Credentials
 
