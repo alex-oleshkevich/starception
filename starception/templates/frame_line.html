@@ -1,7 +1,7 @@
 {% set extra_css_class = '' %}
 
 {% if frame|is_vendor %}
-    {% set extra_css_class = extra_css_class ~ ' ' ~ ' vendor' %}
+    {% set extra_css_class = extra_css_class ~ ' ' ~ ' hidden vendor' %}
 {% endif %}
 
 {% if is_current %}
