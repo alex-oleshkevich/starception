@@ -107,12 +107,24 @@ def mask_secrets(value: str, key: str) -> str:
     return value
 
 
+def highlight(value: str) -> str:
+    try:
+        from pygments import highlight
+        from pygments.formatters import HtmlFormatter
+        from pygments.lexers import PythonLexer
+
+        return highlight(value, PythonLexer(), HtmlFormatter(noclasses=True, nowrap=True))  # type: ignore
+    except ImportError:
+        return value
+
+
 jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__))
 jinja.filters.update(
     {
         'symbol': get_symbol,
         'frame_id': frame_id,
         'is_vendor': is_vendor,
+        'highlight': highlight,
         'mask_secrets': mask_secrets,
         'package_dir': get_package_dir,
         'package_name': get_package_name,

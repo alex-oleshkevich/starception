@@ -17,7 +17,8 @@ class WithHintError(Exception):
 def index_view(request: Request) -> typing.NoReturn:
     request.state.token = 'mytoken'
     request.app.state.app_token = 'app mytoken'
-    raise TypeError('Oops, something really went wrong...')
+    cause = ValueError('This is a cause')
+    raise TypeError('Oops, something really went wrong...') from cause
 
 
 def hint_view(request: Request) -> typing.NoReturn:
