@@ -45,9 +45,25 @@ See example application in [examples/](examples/) directory of this repository.
 
 ## Usage
 
+Starception will work only in debug mode so don't forget to set `debug=True` for local development.
+
+### Monkey patching Starlette
+
+To replace built-in debug exception handler call `install_error_handler` before you create Starlette instance.
+> Currently, this is a recommended approach.
+
+```python
+from starception import install_error_handler
+from starlette.applications import Starlette
+
+install_error_handler()
+app = Starlette()
+```
+
+### Using middleware
+
 To render a beautiful exception page you need to install a `StarceptionMiddleware` middleware to your application.
 
-> The middleware will work only in debug mode so don't forget to set `debug=True` for local development.
 
 > Note, to catch as many exceptions as possible the middleware has to be the first one in the stack.
 

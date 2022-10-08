@@ -11,6 +11,7 @@ import typing
 from markupsafe import Markup
 from pprint import pformat
 from starlette.datastructures import URL
+from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
 
@@ -46,6 +47,20 @@ def to_ide_link(path: str, lineno: int) -> str:
     """Generate open file link for current editor."""
     template = open_link_templates.get(_editor, 'none')
     return template.format(path=path, lineno=lineno)
+
+
+def install_error_handler() -> None:
+    """
+    Replace Starlette debug exception handler in-place.
+
+    May be, someday, we won't need it.
+    See https://github.com/encode/starlette/discussions/1867
+    """
+
+    def bound_handler(self: ServerErrorMiddleware, request: Request, exc: Exception) -> Response:
+        return exception_handler(request, exc)
+
+    setattr(ServerErrorMiddleware, 'debug_response', bound_handler)
 
 
 def get_relative_filename(path: str) -> str:
