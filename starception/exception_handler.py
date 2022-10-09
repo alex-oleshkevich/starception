@@ -51,17 +51,22 @@ def add_link_template(editor: str, template: str) -> None:
 
 def to_ide_link(path: str, lineno: int) -> str:
     """Generate open file link for current editor."""
-    template = open_link_templates.get(_editor, 'none')
+    template = open_link_templates.get(_editor, open_link_templates['none'])
     return template.format(path=path, lineno=lineno)
 
 
-def install_error_handler() -> None:
+def install_error_handler(
+    theme: typing.Literal['light', 'dark'] = 'light',
+    editor: str = '',
+) -> None:
     """
     Replace Starlette debug exception handler in-place.
 
     May be, someday, we won't need it.
     See https://github.com/encode/starlette/discussions/1867
     """
+    set_theme(theme)
+    set_editor(editor)
 
     def bound_handler(self: ServerErrorMiddleware, request: Request, exc: Exception) -> Response:
         return exception_handler(request, exc)
