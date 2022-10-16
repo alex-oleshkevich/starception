@@ -19,15 +19,17 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.7",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 starlette = "^0"
 MarkupSafe = "^2"
 Jinja2 = "^3"
+typing_extensions = "^4.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.0"
