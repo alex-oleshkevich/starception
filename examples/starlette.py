@@ -26,6 +26,10 @@ def index_view(request: Request) -> typing.NoReturn:
     raise ValueError('This is the first cause')
 
 
+def raise_nested(exc: Exception) -> None:
+    raise ValueError('This is the second cause') from exc
+
+
 def chain_view(request: Request) -> typing.NoReturn:
     request.state.token = 'mytoken'
     request.app.state.app_token = 'app mytoken'
@@ -33,7 +37,7 @@ def chain_view(request: Request) -> typing.NoReturn:
         raise WithHintError('This is the first cause')
     except Exception as exc:
         try:
-            raise ValueError('This is the second cause') from exc
+            raise_nested(exc)
         except Exception as exc:
             raise TypeError('Oops, something really went wrong...') from exc
 
@@ -54,7 +58,7 @@ def css_view(request: Request) -> Response:
     return templates.TemplateResponse('csstest.css', {'request': request})
 
 
-install_error_handler(theme='dark', editor='vscode')
+install_error_handler(editor='vscode')
 app = Starlette(
     debug=True,
     routes=[

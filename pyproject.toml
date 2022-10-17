@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "starception"
 description = "Beautiful debugging page for Starlette apps."
-version = "0.5.2"
+version = "0.5.3"
 authors = ["Alex Oleshkevich <alex.oleshkevich@gmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -41,6 +41,10 @@ flake8 = "^4.0.1"
 uvicorn = "^0.18.2"
 fastapi = "^0.79.0"
 requests = "^2.28.1"
+pygments = { optional = true, version = "^2.13" }
+
+[tool.poetry.extras]
+highlight = ["pygments"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -85,7 +89,7 @@ use_parentheses = true
 [tool.coverage.run]
 branch = true
 source = ["starception"]
-omit = ["tests/*", ".venv/*", ".git/*",  "*/__main__.py"]
+omit = ["tests/*", ".venv/*", ".git/*", "*/__main__.py"]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -102,7 +106,7 @@ show_error_codes = true
 files = ["starception", "examples", "tests"]
 
 [tool.pytest.ini_options]
-minversion =  "7.1"
+minversion = "7.1"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 norecursedirs = [
     "node_modules", "frontend", "storage", "dist", ".git",
