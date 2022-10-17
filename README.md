@@ -14,14 +14,20 @@ Beautiful exception page for Starlette and FastAPI apps.
 Install `starception` using PIP or poetry:
 
 ```bash
-pip install starception[pygments]
+pip install starception
 # or
-poetry add starception -E pygments
+poetry add starception
 ```
 
 ### With syntax highlight support
 
 If you want to colorize code snippets, install `pygments` library.
+
+```bash
+pip install starception[pygments]
+# or
+poetry add starception -E pygments
+```
 
 ## Screenshot
 
