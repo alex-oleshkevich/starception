@@ -30,7 +30,7 @@ def raise_nested(exc: Exception) -> None:
     raise ValueError('This is the second cause') from exc
 
 
-def chain_view(request: Request) -> typing.NoReturn:
+def chain_view(request: Request) -> None:
     request.state.token = 'mytoken'
     request.app.state.app_token = 'app mytoken'
     try:

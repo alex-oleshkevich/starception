@@ -51,9 +51,9 @@ repos:
         rev: 'v0.971'
         hooks:
             -   id: mypy
-                files: "starception"
                 additional_dependencies:
                     - jinja2
+                    - fastapi
 
     -   repo: https://github.com/myint/docformatter.git
         rev: v1.4
