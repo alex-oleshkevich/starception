@@ -1,4 +1,5 @@
 import dataclasses
+import typing_extensions
 
 import hashlib
 import html
@@ -16,7 +17,7 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
 
 _editor: str = 'none'
-_theme: typing.Literal['light', 'dark'] = 'light'
+_theme: typing_extensions.Literal['light', 'dark'] = 'light'
 open_link_templates: typing.Dict[str, str] = {
     'none': 'file://{path}',
     'vscode': 'vscode://file/{path}:{lineno}',
@@ -33,7 +34,7 @@ def set_editor(name: str) -> None:
     _editor = name
 
 
-def set_theme(theme: typing.Literal['light', 'dark']) -> None:
+def set_theme(theme: typing_extensions.Literal['light', 'dark']) -> None:
     global _theme
     _theme = theme
 
@@ -56,7 +57,7 @@ def to_ide_link(path: str, lineno: int) -> str:
 
 
 def install_error_handler(
-    theme: typing.Literal['light', 'dark'] = 'light',
+    theme: typing_extensions.Literal['light', 'dark'] = 'light',
     editor: str = '',
 ) -> None:
     """
@@ -183,7 +184,8 @@ def highlight(value: str, filename: str) -> str:
             '.css': CssLexer(),
             '.js': JavascriptLexer(),
         }
-        if lexer := mapping.get(extension):
+        lexer = mapping.get(extension)
+        if lexer:
             return highlight(value, lexer, HtmlFormatter(noclasses=True, nowrap=True, style=style))  # type: ignore
         return value
     except ImportError:
@@ -239,7 +241,8 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
         )
     ]
     exception = exc
-    while cause := getattr(exception, '__cause__'):
+    cause = getattr(exception, '__cause__')
+    while cause:
         stack.append(
             StackItem(
                 exc=cause,
@@ -247,7 +250,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
                 frames=inspect.getinnerframes(cause.__traceback__, limit) if cause.__traceback__ else [],
             )
         )
-        exception = cause
+        cause = getattr(cause, '__cause__')
 
     template = jinja.get_template('index.html')
     return template.render(
