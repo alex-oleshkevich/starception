@@ -22,6 +22,7 @@
 <main>
     <!-- exception block -->
     {% for stack_item in stack %}
+        {% set stackloop = loop %}
         <div>
             {% if loop.index0 > 0 %}
                 <header class="section-header" data-toggle-trace="" data-trace-index="{{ loop.index0 }}">
@@ -31,7 +32,7 @@
                     </div>
                 </header>
             {% endif %}
-            <div data-trace-target="{{ loop.index0 }}" {% if loop.index0 > 0 %} class="collapsed"{% endif %}>
+            <div id="trace-target-{{ loop.index0 }}" data-trace-target="{{ loop.index0 }}" {% if loop.index0 > 0 %} class="collapsed"{% endif %}>
                 {% if loop.index0 > 0 %}
                     {% if stack_item.solution %}
                         <div style="padding: 0 48px">

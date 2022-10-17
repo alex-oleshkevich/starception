@@ -8,7 +8,7 @@
     {% set extra_css_class = extra_css_class ~ ' ' ~ ' current' %}
 {% endif %}
 
-<div class="frame {{ extra_css_class }}" id="switch-{{ frame|frame_id }}" data-frame-index="{{ frame|frame_id }}">
+<div class="frame {{ extra_css_class }}" id="switch-{{ frame|frame_id }}" data-frame-index="{{ frame|frame_id }}" data-trace-target-index="{{ stackloop.index0 }}">
     <div class="dot {{ '' if frame|is_vendor else 'dot-red' }}"></div>
     <div>
         <span class="text-muted">
