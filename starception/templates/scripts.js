@@ -29,13 +29,17 @@ Array.from(document.querySelectorAll('[data-reveal]')).forEach(function (el) {
 });
 
 
-document.querySelector('#vendor-frames').addEventListener('click', function (e) {
-    Array.from(document.querySelectorAll('.frames .vendor')).forEach(function (frame) {
-        if (e.target.checked) {
-            frame.classList.add('hidden');
-        } else {
-            frame.classList.remove('hidden');
-        }
+document.querySelectorAll('.vendor-frames-toggle').forEach(function (toggle) {
+    toggle.addEventListener('click', function (e) {
+        var traceIndex = toggle.dataset.traceTargetIndex;
+        var traceElement = document.querySelector('#trace-target-' + traceIndex);
+        Array.from(traceElement.querySelectorAll('.frames .vendor')).forEach(function (frame) {
+            if (e.target.checked) {
+                frame.classList.add('hidden');
+            } else {
+                frame.classList.remove('hidden');
+            }
+        });
     });
 });
 
