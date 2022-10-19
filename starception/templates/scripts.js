@@ -1,19 +1,19 @@
 Array.from(document.querySelectorAll('[id^="switch"]')).forEach(function (el) {
     el.addEventListener('click', function () {
-        var traceIndex = el.dataset.traceTargetIndex;
-        var traceElement = document.querySelector('#trace-target-' + traceIndex);
-        var current = traceElement.querySelector('.snippet-wrapper.current');
+        let traceIndex = el.dataset.traceTargetIndex;
+        let traceElement = document.querySelector('#trace-target-' + traceIndex);
+        let current = traceElement.querySelector('.snippet-wrapper.current');
         if (current) {
             current.classList.remove('current');
         }
 
-        var frameIndex = el.dataset.frameIndex;
-        var target = traceElement.querySelector('#snippet-' + frameIndex);
+        let frameIndex = el.dataset.frameIndex;
+        let target = traceElement.querySelector('#snippet-' + frameIndex);
         if (target) {
             target.classList.add('current');
         }
 
-        var currentSwitch = traceElement.querySelector('.frame.current');
+        let currentSwitch = traceElement.querySelector('.frame.current');
         if (currentSwitch) {
             currentSwitch.classList.remove('current');
         }
@@ -29,11 +29,10 @@ Array.from(document.querySelectorAll('[data-reveal]')).forEach(function (el) {
 });
 
 
-document.querySelectorAll('.vendor-frames-toggle').forEach(function (toggle) {
-    toggle.addEventListener('click', function (e) {
-        var traceIndex = toggle.dataset.traceTargetIndex;
-        var traceElement = document.querySelector('#trace-target-' + traceIndex);
-        Array.from(traceElement.querySelectorAll('.frames .vendor')).forEach(function (frame) {
+document.querySelectorAll('[data-vendor-frame-toggle]').forEach(el => {
+    el.addEventListener('click', function (e) {
+        const parent = e.target.closest('.frames');
+        Array.from(parent.querySelectorAll('.vendor')).forEach(function (frame) {
             if (e.target.checked) {
                 frame.classList.add('hidden');
             } else {

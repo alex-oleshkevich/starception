@@ -51,7 +51,7 @@
                         {% if stack_item.has_vendor_frames %}
                             <div style="margin-bottom: 10px">
                                 <label class="checkbox">
-                                    <input type="checkbox" class="vendor-frames-toggle" data-trace-target-index="{{ stackloop.index0 }}" checked> Hide vendor frames
+                                    <input type="checkbox" data-vendor-frame-toggle data-trace-target-index="{{ stackloop.index0 }}" checked> Hide vendor frames
                                 </label>
                             </div>
                         {% endif %}
