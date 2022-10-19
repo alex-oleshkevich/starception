@@ -23,16 +23,16 @@
     <!-- exception block -->
     {% for stack_item in stack %}
         {% set stackloop = loop %}
-        <div>
+        <div data-stack-root="{{ stackloop.loop0 }}">
             {% if loop.index0 > 0 %}
-                <header class="section-header" data-toggle-trace="" data-trace-index="{{ loop.index0 }}">
+                <header class="section-header" data-trace-toggle>
                     Caused by
                     <div>
                         <div class="exception text-red">{{ stack_item.exc|e }}</div>
                     </div>
                 </header>
             {% endif %}
-            <div id="trace-target-{{ loop.index0 }}" data-trace-target="{{ loop.index0 }}" {% if loop.index0 > 0 %} class="collapsed"{% endif %}>
+            <div data-trace-target {% if loop.index0 > 0 %} class="collapsed"{% endif %}>
                 {% if loop.index0 > 0 %}
                     {% if stack_item.solution %}
                         <div style="padding: 0 48px">
@@ -51,7 +51,7 @@
                         {% if stack_item.has_vendor_frames %}
                             <div style="margin-bottom: 10px">
                                 <label class="checkbox">
-                                    <input type="checkbox" data-vendor-frame-toggle data-trace-target-index="{{ stackloop.index0 }}" checked> Hide vendor frames
+                                    <input type="checkbox" data-vendor-frame-toggle checked> Hide vendor frames
                                 </label>
                             </div>
                         {% endif %}

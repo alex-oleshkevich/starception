@@ -26,8 +26,12 @@ def index_view(request: Request) -> typing.NoReturn:
     raise ValueError('This is the first cause')
 
 
-def raise_nested(exc: Exception) -> None:
-    raise ValueError('This is the second cause') from exc
+def raise_level2(base: Exception) -> None:
+    raise ValueError('This is the second cause') from base
+
+
+def raise_level1(exc: Exception) -> None:
+    raise_level2(exc)
 
 
 def chain_view(request: Request) -> None:
@@ -37,7 +41,7 @@ def chain_view(request: Request) -> None:
         raise WithHintError('This is the first cause')
     except Exception as exc:
         try:
-            raise_nested(exc)
+            raise_level1(exc)
         except Exception as exc:
             raise TypeError('Oops, something really went wrong...') from exc
 
