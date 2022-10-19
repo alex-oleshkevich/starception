@@ -4,7 +4,7 @@
     {% set extra_css_class = extra_css_class ~ ' ' ~ 'current' %}
 {% endif %}
 
-<div id="snippet-{{ frame|frame_id }}" class="snippet-wrapper{{ extra_css_class }}">
+<div data-snippet="{{ loop.index0 }}" class="snippet-wrapper{{ extra_css_class }}">
     <div class="snippet">
         <header>
             <span>
