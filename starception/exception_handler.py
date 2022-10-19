@@ -228,26 +228,31 @@ def generate_plain_text(exc: Exception) -> str:
 class StackItem:
     exc: Exception
     frames: typing.List[inspect.FrameInfo]
+    has_vendor_frames: bool
     solution: str
 
 
 def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
     traceback_obj = traceback.TracebackException.from_exception(exc, capture_locals=True)
+    frames = inspect.getinnerframes(exc.__traceback__, limit) if exc.__traceback__ else []
     stack = [
         StackItem(
             exc=exc,
             solution=getattr(exc, 'solution', ''),
-            frames=inspect.getinnerframes(exc.__traceback__, limit) if exc.__traceback__ else [],
+            frames=frames,
+            has_vendor_frames=any(is_vendor(f) for f in frames),
         )
     ]
     exception = exc
     cause = getattr(exception, '__cause__')
     while cause:
+        frames = inspect.getinnerframes(cause.__traceback__, limit) if cause.__traceback__ else []
         stack.append(
             StackItem(
                 exc=cause,
                 solution=getattr(cause, 'solution', ''),
-                frames=inspect.getinnerframes(cause.__traceback__, limit) if cause.__traceback__ else [],
+                frames=frames,
+                has_vendor_frames=any(is_vendor(f) for f in frames),
             )
         )
         cause = getattr(cause, '__cause__')
