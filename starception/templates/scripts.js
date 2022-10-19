@@ -29,13 +29,16 @@ Array.from(document.querySelectorAll('[data-reveal]')).forEach(function (el) {
 });
 
 
-document.querySelector('#vendor-frames').addEventListener('click', function (e) {
-    Array.from(document.querySelectorAll('.frames .vendor')).forEach(function (frame) {
-        if (e.target.checked) {
-            frame.classList.add('hidden');
-        } else {
-            frame.classList.remove('hidden');
-        }
+document.querySelectorAll('[data-vendor-frames]').forEach(el => {
+    el.addEventListener('click', function (e) {
+        const parent = e.target.closest('.frames');
+        Array.from(parent.querySelectorAll('.vendor')).forEach(function (frame) {
+            if (e.target.checked) {
+                frame.classList.add('hidden');
+            } else {
+                frame.classList.remove('hidden');
+            }
+        });
     });
 });
 
