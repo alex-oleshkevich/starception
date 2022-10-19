@@ -12,7 +12,7 @@
     <div class="dot {{ '' if frame|is_vendor else 'dot-red' }}"></div>
     <div>
         <span class="text-muted">
-            {% if not frame|is_vendor %}
+            {% if frame|is_vendor %}
                 {{ frame|package_name }} &middot;
             {% endif %}
         </span>
