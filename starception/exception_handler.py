@@ -23,9 +23,6 @@ open_link_templates: typing.Dict[str, str] = {
     'vscode': 'vscode://file/{path}:{lineno}',
 }
 
-THEME_LIGHT = 'xcode'
-THEME_DARK = 'nord'
-
 
 def set_editor(name: str) -> None:
     """
@@ -178,7 +175,6 @@ def highlight(value: str, filename: str) -> str:
         from pygments.formatters import HtmlFormatter
         from pygments.lexers import CssLexer, HtmlLexer, JavascriptLexer, PythonLexer
 
-        style = THEME_LIGHT if _theme == 'light' else THEME_DARK
         *_, extension = os.path.splitext(filename)
         mapping = {
             '.py': PythonLexer(),
@@ -189,7 +185,7 @@ def highlight(value: str, filename: str) -> str:
         }
         lexer = mapping.get(extension)
         if lexer:
-            return highlight(value, lexer, HtmlFormatter(nowrap=True, style=style))  # type: ignore
+            return highlight(value, lexer, HtmlFormatter(nowrap=True))  # type: ignore
         return value
     except ImportError:
         return value
