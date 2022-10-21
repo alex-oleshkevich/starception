@@ -62,7 +62,7 @@ def css_view(request: Request) -> Response:
     return templates.TemplateResponse('csstest.css', {'request': request})
 
 
-install_error_handler(editor='vscode', theme='dark')
+install_error_handler(editor='vscode', theme='auto')
 app = Starlette(
     debug=True,
     routes=[

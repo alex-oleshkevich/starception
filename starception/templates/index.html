@@ -1,13 +1,23 @@
 {% import 'lib.html' as lib %}
 <!DOCTYPE html>
-<html lang="en" class="{{ theme }}">
+<html lang="en">
 <head>
     <title>{{ exception_class }}: {{ error_message }} | Starception Debugger</title>
     <meta name="viewport" content="width=device-width">
     <style>
         {% include 'styles.css' %}
+        {{ code_theme_light }}
+
         {% if theme == 'dark' %}
             {% include 'dark.css' %}
+            {{ code_theme_dark }}
+        {% endif %}
+
+        {% if theme == 'auto' %}
+            @media (prefers-color-scheme: dark) {
+                {% include 'dark.css' %}
+                {{ code_theme_dark }}
+            }
         {% endif %}
     </style>
 </head>

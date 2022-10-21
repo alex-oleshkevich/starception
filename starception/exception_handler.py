@@ -17,11 +17,14 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
 
 _editor: str = 'none'
-_theme: typing_extensions.Literal['light', 'dark'] = 'light'
+_theme: typing_extensions.Literal['light', 'dark', 'auto'] = 'auto'
 open_link_templates: typing.Dict[str, str] = {
     'none': 'file://{path}',
     'vscode': 'vscode://file/{path}:{lineno}',
 }
+
+THEME_LIGHT = 'xcode'
+THEME_DARK = 'nord'
 
 
 def set_editor(name: str) -> None:
@@ -34,7 +37,7 @@ def set_editor(name: str) -> None:
     _editor = name
 
 
-def set_theme(theme: typing_extensions.Literal['light', 'dark']) -> None:
+def set_theme(theme: typing_extensions.Literal['light', 'dark', 'auto']) -> None:
     global _theme
     _theme = theme
 
@@ -57,7 +60,7 @@ def to_ide_link(path: str, lineno: int) -> str:
 
 
 def install_error_handler(
-    theme: typing_extensions.Literal['light', 'dark'] = 'light',
+    theme: typing_extensions.Literal['light', 'dark', 'auto'] = 'auto',
     editor: str = '',
 ) -> None:
     """
@@ -175,7 +178,7 @@ def highlight(value: str, filename: str) -> str:
         from pygments.formatters import HtmlFormatter
         from pygments.lexers import CssLexer, HtmlLexer, JavascriptLexer, PythonLexer
 
-        style = 'xcode' if _theme == 'light' else 'nord'
+        style = THEME_LIGHT if _theme == 'light' else THEME_DARK
         *_, extension = os.path.splitext(filename)
         mapping = {
             '.py': PythonLexer(),
@@ -186,13 +189,30 @@ def highlight(value: str, filename: str) -> str:
         }
         lexer = mapping.get(extension)
         if lexer:
-            return highlight(value, lexer, HtmlFormatter(noclasses=True, nowrap=True, style=style))  # type: ignore
+            return highlight(value, lexer, HtmlFormatter(nowrap=True, style=style))  # type: ignore
         return value
     except ImportError:
         return value
 
 
+def get_pygments_styles() -> typing.Dict[str, str]:
+    try:
+        from pygments.formatters import HtmlFormatter
+
+        light_formatter = HtmlFormatter(style=THEME_LIGHT)
+        dark_formatter = HtmlFormatter(style=THEME_DARK)
+        return {
+            'code_theme_light': light_formatter.get_style_defs(),
+            'code_theme_dark': dark_formatter.get_style_defs(),
+        }
+    except ImportError:
+        return {'code_theme_light': '', 'code_theme_dark': ''}
+
+
 jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__))
+jinja.globals.update(
+    **get_pygments_styles(),
+)
 jinja.filters.update(
     {
         'symbol': get_symbol,

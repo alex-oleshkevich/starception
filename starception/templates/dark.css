@@ -1,83 +1,82 @@
-.dark body, html.dark {
+body, html {
     color: #e2e8f0;
     background: #1e293b;
 }
 
-.dark .text-muted, .dark .package, .dark .symbol {
+.text-muted, .package, .symbol {
     color: #94a3b8;
 }
 
-.dark .bg-white {
+.bg-white {
     background: #1e293b;
 }
 
-.dark .header {
+.header {
     color: #e2e8f0;
 }
 
-.dark .section-header {
+.section-header {
     color: #e2e8f0;
 }
 
-.dark .section-header:hover {
+.section-header:hover {
     background: #334155;
 }
 
-.dark .solution {
+.solution {
     color: #bbf7d0;
     border-color: #16a34a;
     background-color: #334155;
 }
 
-
-.dark .snippet {
+.snippet {
     background-color: #334155;
 }
 
-.dark .snippet header {
+.snippet header {
     border-color: #475569;
 }
 
-.dark .snippet footer {
+.snippet footer {
     border-color: #475569;
 }
 
-.dark .snippet .line.highlight {
+.snippet .line.highlight {
     background-color: #075985;
 }
 
-.dark .snippet .line-number {
+.snippet .line-number {
     color: inherit;
 }
 
-.dark .frames .frame:hover {
+.frames .frame:hover {
     background-color: #334155;
 }
 
-.dark .frames .frame.current {
+.frames .frame.current {
     background-color: #475569;
 }
 
-.dark .dot {
+.dot {
     background-color: #94a3b8;
 }
 
-.dark .dot-red {
+.dot-red {
     background-color: var(--red);
 }
 
-.dark dl {
+dl {
     border-top-color: #475569;
 }
 
-.dark dl:hover {
+dl:hover {
     background-color: #334155;
 }
 
-.dark dt {
+dt {
     color: inherit;
 }
 
-.dark .locals dd {
+.locals dd {
     background-color: inherit;
 }

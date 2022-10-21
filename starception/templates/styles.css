@@ -140,6 +140,7 @@ section.trace {
 .snippet .line {
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
     overflow-wrap: normal;
 }
 
