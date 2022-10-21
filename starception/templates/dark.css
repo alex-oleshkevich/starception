@@ -1,0 +1,83 @@
+.dark body, html.dark {
+    color: #e2e8f0;
+    background: #1e293b;
+}
+
+.dark .text-muted, .dark .package, .dark .symbol {
+    color: #94a3b8;
+}
+
+.dark .bg-white {
+    background: #1e293b;
+}
+
+.dark .header {
+    color: #e2e8f0;
+}
+
+.dark .section-header {
+    color: #e2e8f0;
+}
+
+.dark .section-header:hover {
+    background: #334155;
+}
+
+.dark .solution {
+    color: #bbf7d0;
+    border-color: #16a34a;
+    background-color: #334155;
+}
+
+
+.dark .snippet {
+    background-color: #334155;
+}
+
+.dark .snippet header {
+    border-color: #475569;
+}
+
+.dark .snippet footer {
+    border-color: #475569;
+}
+
+.dark .snippet .line.highlight {
+    background-color: #075985;
+}
+
+.dark .snippet .line-number {
+    color: inherit;
+}
+
+.dark .frames .frame:hover {
+    background-color: #334155;
+}
+
+.dark .frames .frame.current {
+    background-color: #475569;
+}
+
+.dark .dot {
+    background-color: #94a3b8;
+}
+
+.dark .dot-red {
+    background-color: var(--red);
+}
+
+.dark dl {
+    border-top-color: #475569;
+}
+
+.dark dl:hover {
+    background-color: #334155;
+}
+
+.dark dt {
+    color: inherit;
+}
+
+.dark .locals dd {
+    background-color: inherit;
+}

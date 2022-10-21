@@ -11,7 +11,6 @@ repos:
             -   id: trailing-whitespace
             -   id: end-of-file-fixer
             -   id: detect-private-key
-            -   id: detect-aws-credentials
             -   id: fix-byte-order-marker
             -   id: check-yaml
             -   id: check-json

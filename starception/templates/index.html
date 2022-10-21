@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width">
     <style>
         {% include 'styles.css' %}
+        {% if theme == 'dark' %}
+            {% include 'dark.css' %}
+        {% endif %}
     </style>
 </head>
 <body>
