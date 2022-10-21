@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width">
     <style>
         {% include 'styles.css' %}
-        {{ code_theme_light }}
+        {% include 'code_light.css' %}
 
         {% if theme == 'dark' %}
             {% include 'dark.css' %}
-            {{ code_theme_dark }}
+            {% include 'code_dark.css' %}
         {% endif %}
 
         {% if theme == 'auto' %}
             @media (prefers-color-scheme: dark) {
                 {% include 'dark.css' %}
-                {{ code_theme_dark }}
+                {% include 'code_dark.css' %}
             }
         {% endif %}
     </style>

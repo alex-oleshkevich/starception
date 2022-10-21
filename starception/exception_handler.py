@@ -195,24 +195,7 @@ def highlight(value: str, filename: str) -> str:
         return value
 
 
-def get_pygments_styles() -> typing.Dict[str, str]:
-    try:
-        from pygments.formatters import HtmlFormatter
-
-        light_formatter = HtmlFormatter(style=THEME_LIGHT)
-        dark_formatter = HtmlFormatter(style=THEME_DARK)
-        return {
-            'code_theme_light': light_formatter.get_style_defs(),
-            'code_theme_dark': dark_formatter.get_style_defs(),
-        }
-    except ImportError:
-        return {'code_theme_light': '', 'code_theme_dark': ''}
-
-
 jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__))
-jinja.globals.update(
-    **get_pygments_styles(),
-)
 jinja.filters.update(
     {
         'symbol': get_symbol,
