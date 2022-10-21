@@ -186,15 +186,20 @@ set_editor('vscode')
 
 ## Dark theme
 
-Switch between light/dark themes using `set_theme` utility.
-> Currently, we use `pygments` for syntax highlighting, therefore theme must be set in the code.
-> In future releases we may highlight code on client side, and then we can make Starception to follow your browser's
-> theme.
+Select theme when installing the error handler by configuring `theme` parameter.
+
+```python
+from starception import install_error_handler
+
+install_error_handler(theme='dark')  # valid are "light", "dark", and default "auto"
+```
+
+If you are using middleware then use `set_theme` utility.
 
 ```python
 from starception import set_theme
 
-set_theme('dark')
+set_theme('dark')  # valid are "light", "dark", and default "auto"
 ```
 
 ![image](dark.png)
