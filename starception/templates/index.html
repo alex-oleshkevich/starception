@@ -24,14 +24,14 @@
         <div>
             <!-- auto -> dark -> light -> auto -->
             <button data-theme-toggle>
-                <div data-if-theme="dark">
+                <div data-force-theme="light" title="Force light theme">
                     {% include 'icon_sun.svg' %}
                 </div>
-                <div data-if-theme="light" class="flex-center">
+                <div data-force-theme="auto" class="flex-center" title="Use system theme">
                     {% include 'icon_sun_moon.svg' %}
                     <span>Auto</span>
                 </div>
-                <div data-if-theme="auto">
+                <div data-force-theme="dark" title="Force dark theme">
                     {% include 'icon_moon.svg' %}
                 </div>
             </button>
