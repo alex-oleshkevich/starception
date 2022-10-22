@@ -36,7 +36,7 @@ poetry add starception -E pygments
 <details>
 <summary>Dark theme</summary>
 <div>
-    ![image](dark.png)
+    <img src="./dark.png">
 </div>
 </details>
 
