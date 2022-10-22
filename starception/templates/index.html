@@ -21,7 +21,18 @@
             </div>
             <div class="exception text-red">{{ error_message|e }}</div>
         </div>
-        <div>
+        <div class="flex-center">
+            <div class="search-links">
+                <a target="_blank" href="https://www.google.com/search?q={{ search_query }}">
+                    {% include 'icon_google.svg' %}
+                    <span>Google</span>
+                </a>
+                <a target="_blank" href="https://www.stackoverflow.com/search?q={{ search_query }}">
+                    {% include 'icon_stackoverflow.svg' %}
+                    <span>Stack Overflow</span>
+                </a>
+            </div>
+
             <!-- auto -> dark -> light -> auto -->
             <button data-theme-toggle>
                 <div data-force-theme="light" title="Force light theme">

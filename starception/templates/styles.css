@@ -325,7 +325,7 @@ dd {
     border: 0;
     appearance: none;
     cursor: pointer;
-    padding: 4px;
+    padding: 4px 6px;
     color: var(--theme-toggle-color);
 }
 
@@ -349,7 +349,30 @@ dd {
 }
 
 :root.light:not(.auto) [data-force-theme="light"],
-:root.light:not(.auto) [data-force-theme="dark"]
-{
+:root.light:not(.auto) [data-force-theme="dark"] {
     display: none;
+}
+
+.search-links {
+    margin-right: 64px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-links a {
+    color: var(--theme-toggle-color);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.search-links a svg {
+    width: 20px;
+    height: 20px;
+}
+
+.search-links a:hover {
+    text-decoration: underline;
 }

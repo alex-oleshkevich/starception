@@ -14,6 +14,7 @@ from starlette.datastructures import URL
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
+from urllib.parse import quote_plus
 
 _editor: str = 'none'
 open_link_templates: typing.Dict[str, str] = {
@@ -248,6 +249,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
     template = jinja.get_template('index.html')
     return template.render(
         {
+            'search_query': quote_plus(f'{format_qual_name(traceback_obj.exc_type)} {str(exc)}'),
             'exception_class': format_qual_name(traceback_obj.exc_type),
             'error_message': str(exc) or '""',
             'stack': stack,
