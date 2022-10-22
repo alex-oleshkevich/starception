@@ -32,6 +32,7 @@
     --data-list-bg-hover: var(--gray-lightest);
     --data-list-title-color: var(--gray-light);
     --locals-value-color: var(--gray-lightest);
+    --theme-toggle-color: var(--gray);
 }
 
 html,
@@ -309,5 +310,42 @@ dd {
 }
 
 .collapsed {
+    display: none;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+[data-theme-toggle] {
+    background-color: transparent;
+    border-radius: 8px;
+    border: 0;
+    appearance: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--theme-toggle-color);
+}
+
+[data-theme-toggle]:hover {
+    background-color: var(--gray-lighter);
+}
+
+[data-theme-toggle] svg {
+    width: 32px;
+    height: 32px;
+}
+
+:root.auto [data-if-theme="dark"], :root.auto [data-if-theme="light"] {
+    display: none;
+}
+
+:root.dark [data-if-theme="auto"], :root.dark [data-if-theme="light"] {
+    display: none;
+}
+
+:root.light [data-if-theme="auto"], :root.light [data-if-theme="dark"] {
     display: none;
 }

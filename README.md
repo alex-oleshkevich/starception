@@ -33,6 +33,13 @@ poetry add starception -E pygments
 
 ![image](screenshot.png)
 
+<details>
+<summary>Dark theme</summary>
+<div>
+    ![image](dark.png)
+</div>
+</details>
+
 ## Features
 
 * secrets masking
@@ -183,26 +190,6 @@ from starception import set_editor, add_link_template
 add_link_template('vscode', 'vscode://file/{path}:{lineno}')
 set_editor('vscode')
 ```
-
-## Dark theme
-
-Select theme when installing the error handler by configuring `theme` parameter.
-
-```python
-from starception import install_error_handler
-
-install_error_handler(theme='dark')  # valid are "light", "dark", and default "auto"
-```
-
-If you are using middleware then use `set_theme` utility.
-
-```python
-from starception import set_theme
-
-set_theme('dark')  # valid are "light", "dark", and default "auto"
-```
-
-![image](dark.png)
 
 ## Credentials
 

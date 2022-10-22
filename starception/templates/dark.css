@@ -1,4 +1,4 @@
-:root {
+:root.dark {
     --gray: #e2e8f0;
     --gray-lightest: #1e293b;
     --gray-lighter: #334155;
@@ -16,8 +16,4 @@
     --data-list-bg-hover: #334155;
     --data-list-title-color: inherit;
     --locals-value-color: inherit;
-}
-
-summary:hover {
-    background-color: var(--gray-lighter);
 }

@@ -1,5 +1,4 @@
 import dataclasses
-import typing_extensions
 
 import hashlib
 import html
@@ -17,7 +16,6 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
 
 _editor: str = 'none'
-_theme: typing_extensions.Literal['light', 'dark', 'auto'] = 'auto'
 open_link_templates: typing.Dict[str, str] = {
     'none': 'file://{path}',
     'vscode': 'vscode://file/{path}:{lineno}',
@@ -32,11 +30,6 @@ def set_editor(name: str) -> None:
     """
     global _editor
     _editor = name
-
-
-def set_theme(theme: typing_extensions.Literal['light', 'dark', 'auto']) -> None:
-    global _theme
-    _theme = theme
 
 
 def add_link_template(editor: str, template: str) -> None:
@@ -56,17 +49,13 @@ def to_ide_link(path: str, lineno: int) -> str:
     return template.format(path=path, lineno=lineno)
 
 
-def install_error_handler(
-    theme: typing_extensions.Literal['light', 'dark', 'auto'] = 'auto',
-    editor: str = '',
-) -> None:
+def install_error_handler(editor: str = '') -> None:
     """
     Replace Starlette debug exception handler in-place.
 
     May be, someday, we won't need it.
     See https://github.com/encode/starlette/discussions/1867
     """
-    set_theme(theme)
     set_editor(editor)
 
     def bound_handler(self: ServerErrorMiddleware, request: Request, exc: Exception) -> Response:
@@ -259,7 +248,6 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
     template = jinja.get_template('index.html')
     return template.render(
         {
-            'theme': _theme,
             'exception_class': format_qual_name(traceback_obj.exc_type),
             'error_message': str(exc) or '""',
             'stack': stack,
