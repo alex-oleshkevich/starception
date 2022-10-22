@@ -33,6 +33,13 @@ poetry add starception -E pygments
 
 ![image](screenshot.png)
 
+<details>
+<summary>Dark theme</summary>
+<div>
+    <img src="./dark.png">
+</div>
+</details>
+
 ## Features
 
 * secrets masking
@@ -184,21 +191,7 @@ add_link_template('vscode', 'vscode://file/{path}:{lineno}')
 set_editor('vscode')
 ```
 
-## Dark theme
-
-Switch between light/dark themes using `set_theme` utility.
-> Currently, we use `pygments` for syntax highlighting, therefore theme must be set in the code.
-> In future releases we may highlight code on client side, and then we can make Starception to follow your browser's
-> theme.
-
-```python
-from starception import set_theme
-
-set_theme('dark')
-```
-
-![image](dark.png)
-
 ## Credentials
 
 * Look and feel inspired by [Phoenix Framework](https://www.phoenixframework.org/).
+* Icons by [Tabler Icons](https://tabler-icons.io/).

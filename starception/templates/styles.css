@@ -8,6 +8,31 @@
     --gray-light: rgb(107 114 128);
     --gray-lighter: rgb(229 231 235);
     --gray-lightest: rgb(243 244 246);
+
+    --body-text-color: var(--gray);
+    --body-bg: var(--gray-lightest);
+    --section-bg: white;
+    --text-muted: var(--gray-light);
+    --exception-message-color: var(--red);
+    --exception-header-bg: var(--gray-light);
+    --exception-header-bg-hover: var(--gray-lighter);
+    --solution-text-color: var(--green);
+    --solution-border-color: var(--green-darker);
+    --solution-bg-color: var(--green-lightest);
+    --snippet-bg: white;
+    --snippet-border-color: var(--gray-lightest);
+    --snippet-footer-color: var(--gray-light);
+    --snippet-line-highlight: var(--yellow-lightest);
+    --snippet-line-number: var(--gray-light);
+    --frames-line-hover: var(--gray-lighter);
+    --frames-line-current: white;
+    --frame-dot-color: var(--gray-light);
+    --frame-dot-red-color: var(--red);
+    --data-list-border-color: var(--gray-lighter);
+    --data-list-bg-hover: var(--gray-lightest);
+    --data-list-title-color: var(--gray-light);
+    --locals-value-color: var(--gray-lightest);
+    --theme-toggle-color: var(--gray);
 }
 
 html,
@@ -19,8 +44,8 @@ body {
     margin: 0;
     min-height: 100%;
     height: 100%;
-    color: var(--gray);
-    background: var(--gray-lightest);
+    color: var(--body-text-color);
+    background: var(--body-bg);
     font-family: Inter var, ui-sans-serif, system-ui,
     -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji,
@@ -32,11 +57,7 @@ main > *:not(:first-child) {
 }
 
 .text-muted {
-    color: var(--gray-light);
-}
-
-.bg-white {
-    background-color: white;
+    color: var(--text-muted);
 }
 
 pre {
@@ -51,33 +72,33 @@ pre {
 
 .section-header {
     padding: 8px 48px;
-    color: var(--gray-light);
+    color: var(--exception-header-bg);
 }
 
 .section-header:hover {
     cursor: pointer;
-    background: var(--gray-lighter);
+    background: var(--exception-header-bg-hover);
 }
 
 .exception-class {
-    color: var(--red);
+    color: var(--exception-message-color);
 }
 
 .exception {
     font-size: 1.5rem;
-    margin-top: 0.625rem;
-    color: var(--red);
+    margin-top: 0.25rem;
+    color: var(--exception-message-color);
     font-family: monospace;
 }
 
 .solution {
     margin-top: 3rem;
-    color: var(--green);
+    color: var(--solution-text-color);
     font-size: 1.25rem;
     padding: 1rem;
     border-radius: .25rem;
-    border: 1px solid var(--green-darker);
-    background-color: var(--green-lightest);
+    border: 1px solid var(--solution-border-color);
+    background-color: var(--solution-bg-color);
 }
 
 section {
@@ -101,14 +122,13 @@ section.trace {
 }
 
 .snippet {
-    background-color: white;
+    background-color: var(--snippet-bg);
     padding: 0 16px;
 }
 
-
 .snippet header {
     padding: 16px 0;
-    border-bottom: 1px solid var(--gray-lightest);
+    border-bottom: 1px solid var(--snippet-border-color);
 }
 
 .snippet header a {
@@ -122,13 +142,12 @@ section.trace {
 
 .snippet footer {
     padding: 16px 0;
-    border-top: 1px solid var(--gray-lightest);
+    border-top: 1px solid var(--snippet-border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: var(--gray-light);
+    color: var(--snippet-footer-color);
 }
-
 
 .snippet pre {
     margin: 2px 0;
@@ -140,18 +159,19 @@ section.trace {
 .snippet .line {
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
     overflow-wrap: normal;
 }
 
 .snippet .line.highlight {
-    background-color: var(--yellow-lightest);
+    background-color: var(--snippet-line-highlight);
 }
 
 .snippet .line-number {
     text-align: right;
     width: 48px;
     margin-right: 24px;
-    color: var(--gray-light);
+    color: var(--snippet-line-number);
     flex-shrink: 0;
 }
 
@@ -172,22 +192,26 @@ section.trace {
 }
 
 .frames .frame:hover {
-    background-color: var(--gray-lighter);
+    background-color: var(--frames-line-hover);
 }
 
 .frames .frame.current {
-    background-color: white;
+    background-color: var(--frames-line-current);
 }
 
 .dot {
     height: 10px;
     width: 10px;
     border-radius: 100%;
-    background-color: var(--gray-light);
+    background-color: var(--frame-dot-color);
 }
 
 .dot-red {
-    background-color: var(--red);
+    background-color: var(--frame-dot-red-color);
+}
+
+.request-information {
+    background-color: var(--section-bg);
 }
 
 details {
@@ -196,6 +220,7 @@ details {
 
 summary {
     cursor: pointer;
+    padding: 4px;
 }
 
 dl {
@@ -204,20 +229,19 @@ dl {
     align-items: start;
     margin: 0;
     padding: 4px;
-    border-top: 1px solid var(--gray-lighter);
+    border-top: 1px solid var(--data-list-border-color);
 }
-
 
 dl:first-of-type {
     margin-top: 16px;
 }
 
 dl:hover {
-    background-color: var(--gray-lightest);
+    background-color: var(--data-list-bg-hover);
 }
 
 dt {
-    color: var(--gray-light);
+    color: var(--data-list-title-color);
     text-overflow: ellipsis;
     grid-column: span 2 / span 2;
 }
@@ -244,7 +268,7 @@ dd {
     flex: auto;
     overflow-x: auto;
     padding: 2px 8px;
-    background-color: var(--gray-lightest);
+    background-color: var(--locals-value-color);
 }
 
 .open-uri {
@@ -286,5 +310,46 @@ dd {
 }
 
 .collapsed {
+    display: none;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+[data-theme-toggle] {
+    background-color: transparent;
+    border-radius: 8px;
+    border: 0;
+    appearance: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--theme-toggle-color);
+}
+
+[data-theme-toggle]:hover {
+    background-color: var(--gray-lighter);
+}
+
+[data-theme-toggle] svg {
+    width: 32px;
+    height: 32px;
+}
+
+:root.auto [data-force-theme="auto"],
+:root.auto [data-force-theme="light"] {
+    display: none;
+}
+
+:root.dark:not(.auto) [data-force-theme="auto"],
+:root.dark:not(.auto) [data-force-theme="dark"] {
+    display: none;
+}
+
+:root.light:not(.auto) [data-force-theme="light"],
+:root.light:not(.auto) [data-force-theme="dark"]
+{
     display: none;
 }
