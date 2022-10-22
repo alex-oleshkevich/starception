@@ -1,82 +1,23 @@
-body, html {
-    color: #e2e8f0;
-    background: #1e293b;
+:root {
+    --gray: #e2e8f0;
+    --gray-lightest: #1e293b;
+    --gray-lighter: #334155;
+    --gray-light: #94a3b8;
+    --section-bg: #1e293b;
+    --green: #bbf7d0;
+    --green-darker: #16a34a;
+    --green-lightest: #334155;
+    --snippet-bg: var(--gray-lighter);
+    --snippet-border-color: #475569;
+    --snippet-line-highlight: #075985;
+    --snippet-line-number: inherit;
+    --frames-line-current: #475569;
+    --data-list-border-color: #475569;
+    --data-list-bg-hover: #334155;
+    --data-list-title-color: inherit;
+    --locals-value-color: inherit;
 }
 
-.text-muted, .package, .symbol {
-    color: #94a3b8;
-}
-
-.bg-white {
-    background: #1e293b;
-}
-
-.header {
-    color: #e2e8f0;
-}
-
-.section-header {
-    color: #e2e8f0;
-}
-
-.section-header:hover {
-    background: #334155;
-}
-
-.solution {
-    color: #bbf7d0;
-    border-color: #16a34a;
-    background-color: #334155;
-}
-
-.snippet {
-    background-color: #334155;
-}
-
-.snippet header {
-    border-color: #475569;
-}
-
-.snippet footer {
-    border-color: #475569;
-}
-
-.snippet .line.highlight {
-    background-color: #075985;
-}
-
-.snippet .line-number {
-    color: inherit;
-}
-
-.frames .frame:hover {
-    background-color: #334155;
-}
-
-.frames .frame.current {
-    background-color: #475569;
-}
-
-.dot {
-    background-color: #94a3b8;
-}
-
-.dot-red {
-    background-color: var(--red);
-}
-
-dl {
-    border-top-color: #475569;
-}
-
-dl:hover {
-    background-color: #334155;
-}
-
-dt {
-    color: inherit;
-}
-
-.locals dd {
-    background-color: inherit;
+summary:hover {
+    background-color: var(--gray-lighter);
 }
