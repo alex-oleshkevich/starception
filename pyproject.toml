@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "starception"
 description = "Beautiful debugging page for Starlette apps."
-version = "0.5.5"
+version = "0.6.1"
 authors = ["Alex Oleshkevich <alex.oleshkevich@gmail.com>"]
 license = "MIT"
 readme = "README.md"
