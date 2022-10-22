@@ -194,3 +194,4 @@ set_editor('vscode')
 ## Credentials
 
 * Look and feel inspired by [Phoenix Framework](https://www.phoenixframework.org/).
+* Icons by [Tabler Icons](https://tabler-icons.io/).
