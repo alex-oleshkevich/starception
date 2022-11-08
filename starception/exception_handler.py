@@ -4,6 +4,7 @@ import hashlib
 import html
 import inspect
 import jinja2
+import markupsafe
 import os
 import sys
 import traceback
@@ -178,7 +179,7 @@ def highlight(value: str, filename: str) -> str:
             return highlight(value, lexer, HtmlFormatter(nowrap=True))  # type: ignore
         return value
     except ImportError:
-        return value
+        return markupsafe.escape(value)
 
 
 jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__))
