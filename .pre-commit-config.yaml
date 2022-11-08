@@ -30,7 +30,7 @@ repos:
                 name: isort (python)
 
     -   repo: https://github.com/psf/black.git
-        rev: 22.6.0
+        rev: 22.10.0
         hooks:
             -   id: black
 
@@ -41,13 +41,13 @@ repos:
                 args: [ '--in-place', '--remove-all-unused-imports', '--remove-unused-variable' ]
 
 
-    -   repo: https://gitlab.com/pycqa/flake8
-        rev: 3.9.2
+    -   repo: https://github.com/pycqa/flake8
+        rev: 5.0.4
         hooks:
             -   id: flake8
 
     -   repo: https://github.com/pre-commit/mirrors-mypy
-        rev: 'v0.971'
+        rev: 'v0.990'
         hooks:
             -   id: mypy
                 additional_dependencies:
@@ -55,7 +55,7 @@ repos:
                     - fastapi
 
     -   repo: https://github.com/myint/docformatter.git
-        rev: v1.4
+        rev: v1.5.0
         hooks:
             -   id: docformatter
                 args: [ '--in-place', '--wrap-summaries=80', '--wrap-descriptions=80', '--pre-summary-newline' ]
