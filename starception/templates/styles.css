@@ -338,17 +338,17 @@ dd {
     height: 32px;
 }
 
-:root.auto [data-force-theme="auto"],
+:root.auto [data-force-theme="dark"],
 :root.auto [data-force-theme="light"] {
     display: none;
 }
 
 :root.dark:not(.auto) [data-force-theme="auto"],
-:root.dark:not(.auto) [data-force-theme="dark"] {
+:root.dark:not(.auto) [data-force-theme="light"] {
     display: none;
 }
 
-:root.light:not(.auto) [data-force-theme="light"],
+:root.light:not(.auto) [data-force-theme="auto"],
 :root.light:not(.auto) [data-force-theme="dark"] {
     display: none;
 }
