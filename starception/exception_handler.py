@@ -15,12 +15,61 @@ from starlette.datastructures import URL
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
+from starlette.routing import BaseRoute, Mount, NoMatchFound, Router
+from starlette.types import Receive, Scope, Send
 from urllib.parse import quote_plus
 
 _editor: str = 'none'
 open_link_templates: typing.Dict[str, str] = {
     'none': 'file://{path}',
     'vscode': 'vscode://file/{path}:{lineno}',
+}
+
+
+@dataclasses.dataclass
+class RouteInfo:
+    methods: typing.List[str]
+    type: str
+    middleware: typing.List[str]
+    path_name: str
+    path_pattern: str
+    endpoint: typing.Any
+
+    @property
+    def endpoint_name(self) -> str:
+        module_name = getattr(self.endpoint, '__module__')
+        base_name = getattr(self.endpoint, '__name__', getattr(self.endpoint.__class__, '__name__'))
+        return f'{module_name}.{base_name}'
+
+
+def collect_routes(routes: typing.Iterable[BaseRoute], prefix: str = '') -> typing.Iterable[RouteInfo]:
+    for route in routes:
+        if isinstance(route, Mount) and len(route.routes):
+            yield from collect_routes(list(route.routes), route.path_format)
+        else:
+            endpoint = getattr(route, 'endpoint', getattr(route, 'app'))
+            yield RouteInfo(
+                methods=getattr(route, 'methods', []),
+                type=type(route).__name__,
+                path_name=getattr(route, 'name', ''),
+                path_pattern=prefix + getattr(route, 'path_format', ''),
+                endpoint=endpoint,
+                middleware=[],
+            )
+
+
+def not_found_renderer(request: Request, exc: BaseException) -> str:
+    routes = list(collect_routes(request.app.routes))
+    return jinja.get_template('custom_exceptions/not_found.html').render(
+        {
+            'routes': routes,
+        }
+    )
+
+
+ExceptionRenderer = typing.Callable[[Request, BaseException], str]
+exception_renderers: typing.Dict[typing.Type[BaseException], ExceptionRenderer] = {
+    NoMatchFound: not_found_renderer,
 }
 
 
@@ -51,7 +100,10 @@ def to_ide_link(path: str, lineno: int) -> str:
     return template.format(path=path, lineno=lineno)
 
 
-def install_error_handler(editor: str = '') -> None:
+def install_error_handler(
+    editor: str = '',
+    custom_exception_renderers: typing.Optional[typing.Dict[typing.Type[BaseException], ExceptionRenderer]] = None,
+) -> None:
     """
     Replace Starlette debug exception handler in-place.
 
@@ -60,10 +112,22 @@ def install_error_handler(editor: str = '') -> None:
     """
     set_editor(editor)
 
+    if custom_exception_renderers:
+        exception_renderers.update(custom_exception_renderers)
+
     def bound_handler(self: ServerErrorMiddleware, request: Request, exc: Exception) -> Response:
         return exception_handler(request, exc)
 
+    original_handler = getattr(Router, 'not_found')
+
+    async def patched_not_found(self: Router, scope: Scope, receive: Receive, send: Send) -> None:
+        if 'app' in scope and scope['app'].debug:
+            raise NoMatchFound('', {})
+        else:
+            await original_handler(self, scope, receive, send)
+
     setattr(ServerErrorMiddleware, 'debug_response', bound_handler)
+    setattr(Router, 'not_found', patched_not_found)
 
 
 def get_relative_filename(path: str) -> str:
@@ -247,6 +311,14 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
         )
         cause = getattr(cause, '__cause__')
 
+    custom_exception_block = ''
+    exception_renderer = exception_renderers.get(exc.__class__)
+    if exception_renderer:
+        try:
+            custom_exception_block = exception_renderer(request, exc)
+        except Exception as ex:
+            custom_exception_block = f"Got exception while rendering exception details: {ex.__class__.__name__} {ex}."
+
     template = jinja.get_template('index.html')
     return template.render(
         {
@@ -290,6 +362,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
                 "Paths": Markup("<br>".join(sys.path)),
             },
             'environment': os.environ,
+            'custom_exception_block': custom_exception_block,
             'solution': getattr(exc, 'solution', None),
         }
     )

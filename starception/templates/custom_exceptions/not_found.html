@@ -1,0 +1,35 @@
+<strong>Available routes</strong>
+<br/>
+<br/>
+<table style="width: 100%;" class="table">
+    <thead>
+    <tr>
+        <th style="text-align: right">Name</th>
+        <th>Methods</th>
+        <th>Path pattern</th>
+        <th>Endpoint</th>
+        <th>Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for route in routes %}
+        <tr>
+            <td style="text-align: right">
+                {{ route.path_name }}
+            </td>
+            <td>
+                {{ route.methods|join(', ') }}
+            </td>
+            <td>
+                {{ route.path_pattern }}
+            </td>
+            <td>
+                {{ route.endpoint_name }}
+            </td>
+            <td>
+                {{ route.type }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
