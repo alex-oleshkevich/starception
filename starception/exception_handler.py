@@ -49,7 +49,7 @@ def collect_routes(routes: typing.Iterable[BaseRoute], prefix: str = '') -> typi
         else:
             endpoint = getattr(route, 'endpoint', getattr(route, 'app'))
             yield RouteInfo(
-                methods=getattr(route, 'methods', []),
+                methods=getattr(route, 'methods', []) or [],
                 type=type(route).__name__,
                 path_name=getattr(route, 'name', ''),
                 path_pattern=prefix + getattr(route, 'path_format', ''),
