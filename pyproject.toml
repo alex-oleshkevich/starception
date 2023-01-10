@@ -26,12 +26,12 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-starlette = "^0"
 MarkupSafe = "^2"
 Jinja2 = "^3"
 typing_extensions = "^4.4"
 
 [tool.poetry.group.dev.dependencies]
+starlette = "^0"
 pytest = "^7.2"
 pytest-asyncio = "^0.18.0"
 pytest-cov = "^4.0"
