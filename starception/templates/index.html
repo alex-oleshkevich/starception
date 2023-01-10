@@ -54,6 +54,15 @@
                     </div>
                 </header>
             {% endif %}
+
+            {% if loop.index0 == 0 and custom_exception_block %}
+                <div style="padding: 20px 40px 0px 40px;">
+                    <div style="background: var(--snippet-bg); padding: 24px;">
+                        {{ custom_exception_block }}
+                    </div>
+                </div>
+            {% endif %}
+
             <div data-trace-target {% if loop.index0 > 0 %} class="collapsed"{% endif %}>
                 {% if loop.index0 > 0 %}
                     {% if stack_item.solution %}

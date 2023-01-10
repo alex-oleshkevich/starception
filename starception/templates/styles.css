@@ -376,3 +376,20 @@ dd {
 .search-links a:hover {
     text-decoration: underline;
 }
+
+.table {
+    width: 100%;
+}
+
+.table th, .table td {
+    text-align: left;
+    padding: 3px 8px;
+}
+
+.table tbody tr td {
+    border-top: 1px solid var(--data-list-border-color);
+}
+
+.table tbody tr:hover {
+    background-color: var(--data-list-bg-hover);
+}
