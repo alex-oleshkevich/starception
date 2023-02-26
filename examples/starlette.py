@@ -3,7 +3,7 @@ import typing
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import Response
-from starlette.routing import Route
+from starlette.routing import Mount, Route, WebSocketRoute
 from starlette.templating import Jinja2Templates
 
 from starception import install_error_handler
@@ -72,5 +72,23 @@ app = Starlette(
         Route('/css', css_view),
         Route('/template', template_view),
         Route('/javascript', javascript_view),
+        Mount(
+            '/app',
+            routes=[
+                Route('/node', index_view, name='index1'),
+                Mount(
+                    '/nested',
+                    routes=[
+                        Route('/node/{id:int}', index_view, name='nested_node'),
+                        Route('/node/{id:uuid}-{user:str}-{counter:int}', index_view, name='params_node'),
+                        Route('/node2', index_view, name='nested_node'),
+                        Mount('/level2', routes=[Route('/node/{id}', index_view)]),
+                    ],
+                    name='nested',
+                ),
+            ],
+        ),
+        Mount('/subapp', app=Starlette(), name='subapp'),
+        WebSocketRoute('/ws', index_view),
     ],
 )
