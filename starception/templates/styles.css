@@ -124,6 +124,8 @@ section.trace {
 .snippet {
     background-color: var(--snippet-bg);
     padding: 0 16px;
+    position: sticky;
+    top: 48px;
 }
 
 .snippet header {
