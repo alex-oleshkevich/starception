@@ -37,8 +37,17 @@
             </button>
         </div>
     </div>
-    {% if solution %}
-        <div class="solution">Hint: {{ solution }}</div>
+    {% if solution or notes %}
+        <div class="solution">
+            <ul>
+                {% if solution %}
+                    <li>{{ solution }}</li>
+                {% endif %}
+                {% for note in notes %}
+                    <li>{{ note }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
 </header>
 <main>
@@ -56,9 +65,18 @@
             {% endif %}
             <div data-trace-target {% if loop.index0 > 0 %} class="collapsed"{% endif %}>
                 {% if loop.index0 > 0 %}
-                    {% if stack_item.solution %}
+                    {% if stack_item.solution or stack_item.notes %}
                         <div style="padding: 0 48px">
-                            <div class="solution" style="margin-top: 8px">Hint: {{ stack_item.solution }}</div>
+                            <div class="solution" style="margin-top: 8px">
+                                <ul>
+                                    {% if stack_item.solution %}
+                                        <li>{{ stack_item.solution }}</li>
+                                    {% endif %}
+                                    {% for note in stack_item.notes %}
+                                        <li>{{ note }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     {% endif %}
                 {% endif %}

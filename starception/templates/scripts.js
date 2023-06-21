@@ -136,7 +136,6 @@ function restoreColorTheme() {
  */
 function bindStackBlock(el) {
     restoreColorTheme();
-    bindThemeToggle();
     bindVendorFramesToggle(el);
     bindExceptionBlocks(el);
     bindCodeSnippets(el);
@@ -147,4 +146,7 @@ function bindStackBlocks() {
     document.querySelectorAll('[data-stack-root]').forEach(bindStackBlock);
 }
 
-document.addEventListener('DOMContentLoaded', bindStackBlocks);
+document.addEventListener('DOMContentLoaded', () => {
+    bindThemeToggle();
+    bindStackBlocks();
+});

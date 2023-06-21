@@ -228,6 +228,7 @@ class StackItem:
     frames: typing.List[inspect.FrameInfo]
     has_vendor_frames: bool
     solution: str
+    notes: typing.List[str]
 
 
 def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
@@ -237,6 +238,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
         StackItem(
             exc=exc,
             solution=getattr(exc, 'solution', ''),
+            notes=getattr(exc, '__notes__', []),
             frames=frames,
             has_vendor_frames=any(is_vendor(f) for f in frames),
         )
@@ -249,6 +251,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
             StackItem(
                 exc=cause,
                 solution=getattr(cause, 'solution', ''),
+                notes=getattr(exc, '__notes__', []),
                 frames=frames,
                 has_vendor_frames=any(is_vendor(f) for f in frames),
             )
@@ -299,6 +302,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
             },
             'environment': os.environ,
             'solution': getattr(exc, 'solution', None),
+            'notes': getattr(exc, '__notes__', []),
         }
     )
 
