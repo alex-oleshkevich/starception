@@ -55,7 +55,7 @@ poetry add starception -E pygments
 * exception chains
 * dark theme
 
-The middleware will automatically mask any value which key contains `key`, `secret`, `token`, `password`.
+Starception automatically masks any value which key contains `key`, `secret`, `token`, `password`.
 
 ## Quick start
 
@@ -63,12 +63,9 @@ See example application in [examples/](examples/) directory of this repository.
 
 ## Usage
 
-Starception will work only in debug mode so don't forget to set `debug=True` for local development.
-
-### Monkey patching Starlette
+Starception will work only in debug mode so don't forget to set `Starlette.debug=True`.
 
 To replace built-in debug exception handler call `install_error_handler` before you create Starlette instance.
-> Currently, this is a recommended approach.
 
 ```python
 from starception import install_error_handler
@@ -76,58 +73,6 @@ from starlette.applications import Starlette
 
 install_error_handler()
 app = Starlette()
-```
-
-### Using middleware
-
-To render a beautiful exception page you need to install a `StarceptionMiddleware` middleware to your application.
-
-
-> Note, to catch as many exceptions as possible the middleware has to be the first one in the stack.
-
-```python
-import typing
-
-from starlette.applications import Starlette
-from starlette.middleware import Middleware
-from starlette.requests import Request
-from starlette.routing import Route
-
-from starception import StarceptionMiddleware
-
-
-async def index_view(request: Request) -> typing.NoReturn:
-    raise TypeError('Oops, something really went wrong...')
-
-
-app = Starlette(
-    debug=True,
-    routes=[Route('/', index_view)],
-    middleware=[
-        Middleware(StarceptionMiddleware),
-        # other middleware go here
-    ],
-)
-```
-
-### Integration with FastAPI
-
-Attach `StarceptionMiddleware` middleware to your FastAPI application:
-
-```python
-import typing
-
-from fastapi import FastAPI, Request
-
-from starception import StarceptionMiddleware
-
-app = FastAPI(debug=True)
-app.add_middleware(StarceptionMiddleware)  # must be the first one!
-
-
-@app.route('/')
-async def index_view(request: Request) -> typing.NoReturn:
-    raise TypeError('Oops, something really went wrong...')
 ```
 
 ### Integration with other frameworks
