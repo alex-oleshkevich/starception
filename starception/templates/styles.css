@@ -380,3 +380,13 @@ dd {
 .text-error {
     color: var(--red);
 }
+
+.solution ul {
+    margin: 0;
+    padding: 0;
+}
+
+.solution ul li {
+    margin: 0 0 0 20px;
+    padding: 0;
+}
