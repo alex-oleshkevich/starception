@@ -9,12 +9,12 @@ class StarceptionMiddleware:
     """
     Handles returning 500 responses when a server error occurs.
 
-    If 'debug' is set, then traceback responses will be returned,
-    otherwise the designated 'handler' will be called.
+    If 'debug' is set, then traceback responses will be returned, otherwise the
+    designated 'handler' will be called.
 
-    This middleware class should generally be used to wrap *everything*
-    else up, so that unhandled exceptions anywhere in the stack
-    always result in an appropriate 500 response.
+    This middleware class should generally be used to wrap *everything* else up,
+    so that unhandled exceptions anywhere in the stack always result in an
+    appropriate 500 response.
     """
 
     def __init__(self, app: ASGIApp) -> None:

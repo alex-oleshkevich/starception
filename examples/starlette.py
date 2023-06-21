@@ -23,7 +23,7 @@ def index_view(request: Request) -> typing.NoReturn:
     class StrError:
         """Value that raises exception during conversion to string."""
 
-        def __str__(self):
+        def __str__(self) -> str:
             raise ValueError('hahaha crash <b>me</b>')
 
     token = 'mytoken'  # noqa

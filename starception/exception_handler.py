@@ -55,8 +55,8 @@ def install_error_handler(editor: str = '') -> None:
     """
     Replace Starlette debug exception handler in-place.
 
-    May be, someday, we won't need it.
-    See https://github.com/encode/starlette/discussions/1867
+    May be, someday, we won't need it. See
+    https://github.com/encode/starlette/discussions/1867
     """
     set_editor(editor)
 
