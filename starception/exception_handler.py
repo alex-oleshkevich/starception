@@ -182,10 +182,18 @@ def highlight(value: str, filename: str) -> str:
         return markupsafe.escape(value)
 
 
+def save_str(value: typing.Any) -> str:
+    try:
+        return str(value)
+    except Exception as ex:
+        return Markup(f'<span class="text-error">ERROR</span>: {html.escape(str(ex))}')
+
+
 jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__))
 jinja.filters.update(
     {
         'symbol': get_symbol,
+        'save_str': save_str,
         'frame_id': frame_id,
         'is_vendor': is_vendor,
         'highlight': highlight,

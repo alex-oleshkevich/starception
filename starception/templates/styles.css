@@ -376,3 +376,7 @@ dd {
 .search-links a:hover {
     text-decoration: underline;
 }
+
+.text-error {
+    color: var(--red);
+}

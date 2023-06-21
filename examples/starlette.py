@@ -20,9 +20,18 @@ class WithHintError(Exception):
 
 
 def index_view(request: Request) -> typing.NoReturn:
+    class StrError:
+        """Value that raises exception during conversion to string."""
+
+        def __str__(self) -> str:
+            raise ValueError('hahaha crash <b>me</b>')
+
     token = 'mytoken'  # noqa
     request.state.token = 'mytoken'
+
     request.app.state.app_token = 'app mytoken'
+    request.state.error = StrError()
+    request.app.state.error = StrError()
     raise ValueError('This is the first cause')
 
 
