@@ -186,7 +186,7 @@ def save_str(value: typing.Any) -> str:
     try:
         return str(value)
     except Exception as ex:
-        return Markup(f'<span class="text-error">ERROR</span>: {ex}')
+        return Markup(f'<span class="text-error">ERROR</span>: {html.escape(str(ex))}')
 
 
 jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__))

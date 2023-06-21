@@ -24,7 +24,7 @@ def index_view(request: Request) -> typing.NoReturn:
         """Value that raises exception during conversion to string."""
 
         def __str__(self):
-            raise ValueError('hahaha crash me')
+            raise ValueError('hahaha crash <b>me</b>')
 
     token = 'mytoken'  # noqa
     request.state.token = 'mytoken'
