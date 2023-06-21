@@ -71,6 +71,12 @@ def css_view(request: Request) -> Response:
     return templates.TemplateResponse('csstest.css', {'request': request})
 
 
+def exception_notes_view(request: Request) -> Response:
+    exc = ValueError('This is the first cause')
+    exc.add_note('Some more info')
+    raise exc
+
+
 install_error_handler(editor='vscode')
 app = Starlette(
     debug=True,
@@ -78,6 +84,7 @@ app = Starlette(
         Route('/', index_view),
         Route('/hint', hint_view),
         Route('/chain', chain_view),
+        Route('/notes', exception_notes_view),
         Route('/css', css_view),
         Route('/template', template_view),
         Route('/javascript', javascript_view),
