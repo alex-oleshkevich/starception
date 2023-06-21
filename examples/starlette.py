@@ -71,9 +71,10 @@ def css_view(request: Request) -> Response:
     return templates.TemplateResponse('csstest.css', {'request': request})
 
 
-def exception_notes_view(request: Request) -> Response:
+def exception_notes_view(request: Request) -> typing.NoReturn:
     exc = ValueError('This is the first cause')
-    exc.add_note('Some more info')
+    if hasattr(exc, 'add_note'):  # py311
+        exc.add_note('Some more info')
     raise exc
 
 
