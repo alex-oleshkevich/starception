@@ -16,22 +16,22 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.7",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 MarkupSafe = "^2"
 Jinja2 = "^3"
 typing_extensions = "^4.4"
 
 [tool.poetry.group.dev.dependencies]
-starlette = "^0"
+starlette = "*"
 pytest = "^7.2"
 pytest-asyncio = "^0.18.0"
 pytest-cov = "^4.0"
