@@ -17,10 +17,10 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
 from urllib.parse import quote_plus
 
-_editor: str = 'none'
+_editor: str = "none"
 open_link_templates: typing.Dict[str, str] = {
-    'none': 'file://{path}',
-    'vscode': 'vscode://file/{path}:{lineno}',
+    "none": "file://{path}",
+    "vscode": "vscode://file/{path}:{lineno}",
 }
 
 
@@ -47,11 +47,11 @@ def add_link_template(editor: str, template: str) -> None:
 
 def to_ide_link(path: str, lineno: int) -> str:
     """Generate open file link for current editor."""
-    template = open_link_templates.get(_editor, open_link_templates['none'])
+    template = open_link_templates.get(_editor, open_link_templates["none"])
     return template.format(path=path, lineno=lineno)
 
 
-def install_error_handler(editor: str = '') -> None:
+def install_error_handler(editor: str = "") -> None:
     """
     Replace Starlette debug exception handler in-place.
 
@@ -63,7 +63,7 @@ def install_error_handler(editor: str = '') -> None:
     def bound_handler(self: ServerErrorMiddleware, request: Request, exc: Exception) -> Response:
         return exception_handler(request, exc)
 
-    setattr(ServerErrorMiddleware, 'debug_response', bound_handler)
+    setattr(ServerErrorMiddleware, "debug_response", bound_handler)
 
 
 def get_relative_filename(path: str) -> str:
@@ -96,7 +96,7 @@ def frame_id(frame: inspect.FrameInfo) -> str:
 
 
 def is_vendor(frame: inspect.FrameInfo) -> bool:
-    return sys.exec_prefix in frame.filename.replace('./', '')
+    return sys.exec_prefix in frame.filename.replace("./", "")
 
 
 def get_package_name(frame: inspect.FrameInfo) -> str:
@@ -109,7 +109,7 @@ def get_symbol(frame: inspect.FrameInfo) -> str:
         try:
             symbol = type(frame.frame.f_locals["self"]).__name__
         except Exception:
-            return 'n/a'
+            return "n/a"
 
     if "cls" in frame.frame.f_locals and frame.frame.f_locals["cls"]:
         symbol = frame.frame.f_locals["cls"].__name__
@@ -135,13 +135,13 @@ def format_variable(var_value: typing.Any) -> str:
 def _hide_url_secrets(value: str) -> str:
     url = URL(value)
     if url.password:
-        url = url.replace(password='*' * 8)
+        url = url.replace(password="*" * 8)
     return str(url)
 
 
 def mask_secrets(value: str, key: str) -> str:
     key = key.lower()
-    if key.endswith('_url'):
+    if key.endswith("_url"):
         return _hide_url_secrets(value)
 
     if any(
@@ -168,11 +168,11 @@ def highlight(value: str, filename: str) -> str:
 
         *_, extension = os.path.splitext(filename)
         mapping = {
-            '.py': PythonLexer(),
-            '.htm': HtmlLexer(),
-            '.html': HtmlLexer(),
-            '.css': CssLexer(),
-            '.js': JavascriptLexer(),
+            ".py": PythonLexer(),
+            ".htm": HtmlLexer(),
+            ".html": HtmlLexer(),
+            ".css": CssLexer(),
+            ".js": JavascriptLexer(),
         }
         lexer = mapping.get(extension)
         if lexer:
@@ -192,17 +192,17 @@ def save_str(value: typing.Any) -> str:
 jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__))
 jinja.filters.update(
     {
-        'symbol': get_symbol,
-        'save_str': save_str,
-        'frame_id': frame_id,
-        'is_vendor': is_vendor,
-        'highlight': highlight,
-        'to_ide_link': to_ide_link,
-        'mask_secrets': mask_secrets,
-        'package_dir': get_package_dir,
-        'package_name': get_package_name,
-        'format_variable': format_variable,
-        'relative_filename': get_relative_filename,
+        "symbol": get_symbol,
+        "save_str": save_str,
+        "frame_id": frame_id,
+        "is_vendor": is_vendor,
+        "highlight": highlight,
+        "to_ide_link": to_ide_link,
+        "mask_secrets": mask_secrets,
+        "package_dir": get_package_dir,
+        "package_name": get_package_name,
+        "format_variable": format_variable,
+        "relative_filename": get_relative_filename,
     }
 )
 
@@ -237,37 +237,37 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
     stack = [
         StackItem(
             exc=exc,
-            solution=getattr(exc, 'solution', ''),
-            notes=getattr(exc, '__notes__', []),
+            solution=getattr(exc, "solution", ""),
+            notes=getattr(exc, "__notes__", []),
             frames=frames,
             has_vendor_frames=any(is_vendor(f) for f in frames),
         )
     ]
     exception = exc
-    cause = getattr(exception, '__cause__')
+    cause = getattr(exception, "__cause__")
     while cause:
         frames = inspect.getinnerframes(cause.__traceback__, limit) if cause.__traceback__ else []
         stack.append(
             StackItem(
                 exc=cause,
-                solution=getattr(cause, 'solution', ''),
-                notes=getattr(exc, '__notes__', []),
+                solution=getattr(cause, "solution", ""),
+                notes=getattr(exc, "__notes__", []),
                 frames=frames,
                 has_vendor_frames=any(is_vendor(f) for f in frames),
             )
         )
-        cause = getattr(cause, '__cause__')
+        cause = getattr(cause, "__cause__")
 
-    template = jinja.get_template('index.html')
+    template = jinja.get_template("index.html")
     return template.render(
         {
-            'search_query': quote_plus(f'{format_qual_name(traceback_obj.exc_type)} {str(exc)}'),
-            'exception_class': format_qual_name(traceback_obj.exc_type),
-            'error_message': str(exc) or '""',
-            'stack': stack,
-            'request_method': request.method,
-            'request_path': request.url.path,
-            'request_info': {
+            "search_query": quote_plus(f"{format_qual_name(traceback_obj.exc_type)} {str(exc)}"),
+            "exception_class": format_qual_name(traceback_obj.exc_type),
+            "error_message": str(exc) or '""',
+            "stack": stack,
+            "request_method": request.method,
+            "request_path": request.url.path,
+            "request_info": {
                 "Method": request.method,
                 "Path": request.url.path,
                 "Path params": Markup(
@@ -287,28 +287,28 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
                     )
                 ),
                 "Content type": request.headers.get("Content-Type", ""),
-                "Client": f"{request.client.host}:{request.client.port}" if request.client else 'unknown',
+                "Client": f"{request.client.host}:{request.client.port}" if request.client else "unknown",
             },
-            'request_headers': request.headers,
-            'request_state': {k: v for k, v in request.state._state.items()},
-            'session': _get_session_info(request),
-            'cookies': request.cookies,
-            'app_state': {k: v for k, v in request.app.state._state.items()} if 'app' in request.scope else {},
-            'platform': {
+            "request_headers": request.headers,
+            "request_state": {k: v for k, v in request.state._state.items()},
+            "session": _get_session_info(request),
+            "cookies": request.cookies,
+            "app_state": {k: v for k, v in request.app.state._state.items()} if "app" in request.scope else {},
+            "platform": {
                 "Python version": sys.version,
                 "Platform": sys.platform,
                 "Python": sys.executable,
                 "Paths": Markup("<br>".join(sys.path)),
             },
-            'environment': os.environ,
-            'solution': getattr(exc, 'solution', None),
-            'notes': getattr(exc, '__notes__', []),
+            "environment": os.environ,
+            "solution": getattr(exc, "solution", None),
+            "notes": getattr(exc, "__notes__", []),
         }
     )
 
 
 def _get_session_info(request: Request) -> typing.Dict[str, typing.Any]:
     try:
-        return dict(request.session if 'session' in request.scope else {})
+        return dict(request.session if "session" in request.scope else {})
     except Exception:
         return {}
