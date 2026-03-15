@@ -3,31 +3,11 @@
 Beautiful exception page for Starlette and FastAPI apps.
 
 ![PyPI](https://img.shields.io/pypi/v/starception)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/alex-oleshkevich/starception/lint_and_test.yml?branch=master)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/alex-oleshkevich/starception/qa.yml?branch=master)
 ![GitHub](https://img.shields.io/github/license/alex-oleshkevich/starception)
 ![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/pypi/starception)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/starception)
 ![GitHub Release Date](https://img.shields.io/github/release-date/alex-oleshkevich/starception)
-
-## Installation
-
-Install `starception` using PIP or poetry:
-
-```bash
-pip install starception
-# or
-poetry add starception
-```
-
-### With syntax highlight support
-
-If you want to colorize code snippets, install `pygments` library.
-
-```bash
-pip install starception[pygments]
-# or
-poetry add starception -E pygments
-```
 
 ## Screenshot
 
@@ -44,6 +24,7 @@ poetry add starception -E pygments
 
 * secrets masking
 * solution hints
+* exception notes (Python 3.11+)
 * code snippets
 * display request info: query, body, headers, cookies
 * session contents
@@ -51,11 +32,31 @@ poetry add starception -E pygments
 * platform information
 * environment variables
 * syntax highlight
-* open paths in editor (vscode only)
+* open paths in editor (VSCode; extensible via custom link templates)
 * exception chains
 * dark theme
 
-Starception automatically masks any value which key contains `key`, `secret`, `token`, `password`.
+Starception automatically masks any value whose key contains `key`, `secret`, `token`, or `password`.
+
+## Installation
+
+Install `starception` using pip or uv:
+
+```bash
+pip install starception
+# or with uv
+uv add starception
+```
+
+### With syntax highlight support
+
+If you want syntax-highlighted code snippets, install with the `highlight` extra:
+
+```bash
+pip install starception[highlight]
+# or with uv
+uv add starception[highlight]
+```
 
 ## Quick start
 
@@ -63,27 +64,37 @@ See example application in [examples/](examples/) directory of this repository.
 
 ## Usage
 
-Starception will work only in debug mode so don't forget to set `Starlette.debug=True`.
+Starception works only in debug mode — make sure `debug=True` is set on your app.
 
-To replace built-in debug exception handler call `install_error_handler` before you create Starlette instance.
+Call `install_error_handler` before creating your application instance:
+
+**Starlette**
 
 ```python
 from starception import install_error_handler
 from starlette.applications import Starlette
 
 install_error_handler()
-app = Starlette()
+app = Starlette(debug=True)
+```
+
+**FastAPI**
+
+```python
+from starception import install_error_handler
+from fastapi import FastAPI
+
+install_error_handler()
+app = FastAPI(debug=True)
 ```
 
 ### Integration with other frameworks
 
-`starception` exports `starception.exception_handler(request, exc)` function, which you can use in your
-framework.
-But keep in mind, Starlette will [not call](https://github.com/encode/starlette/issues/1802) any custom exception
-handler
-in debug mode (it always uses built-in one).
+`starception` exports `starception.exception_handler(request, exc)`, which you can use directly.
+Keep in mind that Starlette will [not call](https://github.com/encode/starlette/issues/1802) custom exception
+handlers in debug mode — it always uses its built-in one.
 
-The snipped below will not work as you expect (unfortunately).
+The snippet below will **not** work as expected (unfortunately):
 
 ```python
 from starlette.applications import Starlette
@@ -96,9 +107,11 @@ app = Starlette(
 )
 ```
 
+Use `install_error_handler()` instead (shown above).
+
 ## Solution hints
 
-If exception class has `solution` attribute then its content will be used as a solution hint.
+If an exception class has a `solution` attribute, its content will be shown as a hint.
 
 ```python
 class WithHintError(Exception):
@@ -110,9 +123,19 @@ class WithHintError(Exception):
 
 ![image](hints.png)
 
+## Exception notes
+
+Python 3.11+ supports attaching notes to exceptions via `add_note()`. Starception displays them on the error page.
+
+```python
+err = ValueError("something went wrong")
+err.add_note("Check that the config file exists and is readable.")
+raise err
+```
+
 ## Opening files in editor
 
-Set your current editor to open paths in your editor/IDE.
+Set your editor to make file paths in stack frames clickable:
 
 ```python
 from starception import set_editor
@@ -122,21 +145,20 @@ set_editor('vscode')
 
 ![image](link.png)
 
+### Registering custom link templates
 
-> Note, currently only VSCode supported. If you know how to integrate other editors - please PR
-
-### Registering link templates
-
-If your editor is not supported, you can add it by calling `add_link_template` and then selecting it with `set_editor`.
+If your editor is not supported, register it with `add_link_template`:
 
 ```python
 from starception import set_editor, add_link_template
 
-add_link_template('vscode', 'vscode://file/{path}:{lineno}')
-set_editor('vscode')
+add_link_template('zed', 'zed://file/{path}:{lineno}')
+set_editor('zed')
 ```
 
-## Credentials
+> Note: VSCode is supported out of the box. PRs for additional editors are welcome.
+
+## Credits
 
 * Look and feel inspired by [Phoenix Framework](https://www.phoenixframework.org/).
 * Icons by [Tabler Icons](https://tabler-icons.io/).
