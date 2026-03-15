@@ -1,5 +1,4 @@
 import dataclasses
-
 import hashlib
 import html
 import inspect
@@ -15,7 +14,7 @@ from starlette.datastructures import URL
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, PlainTextResponse, Response
-from urllib.parse import quote_plus
+from urllib.parse import quote, quote_plus
 
 _editor: str = "none"
 open_link_templates: typing.Dict[str, str] = {
@@ -48,7 +47,7 @@ def add_link_template(editor: str, template: str) -> None:
 def to_ide_link(path: str, lineno: int) -> str:
     """Generate open file link for current editor."""
     template = open_link_templates.get(_editor, open_link_templates["none"])
-    return template.format(path=path, lineno=lineno)
+    return template.format(path=quote(path, safe="/"), lineno=lineno)
 
 
 def install_error_handler(editor: str = "") -> None:
@@ -139,10 +138,21 @@ def _hide_url_secrets(value: str) -> str:
     return str(url)
 
 
+def _masked_secret_markup(display: str, reveal: str) -> Markup:
+    return Markup(
+        '<span class="masked-secret">{display} <button class="btn-reveal" data-reveal="{reveal}">reveal</button></span>'.format(
+            display=html.escape(display), reveal=html.escape(reveal)
+        )
+    )
+
+
 def mask_secrets(value: str, key: str) -> str:
     key = key.lower()
     if key.endswith("_url"):
-        return _hide_url_secrets(value)
+        masked = _hide_url_secrets(value)
+        if masked != value:
+            return _masked_secret_markup(masked, value)
+        return masked
 
     if any(
         [
@@ -152,17 +162,13 @@ def mask_secrets(value: str, key: str) -> str:
             "secret" in key,
         ]
     ):
-        return Markup(
-            '<span data-reveal="{value}" style="cursor: pointer">{stars} <i>(click to reveal)</i></span> '.format(
-                stars="*" * 8, value=value
-            )
-        )
+        return _masked_secret_markup("*" * 8, str(value))
     return value
 
 
 def highlight(value: str, filename: str) -> str:
     try:
-        from pygments import highlight
+        from pygments import highlight as pygments_highlight
         from pygments.formatters import HtmlFormatter
         from pygments.lexers import CssLexer, HtmlLexer, JavascriptLexer, PythonLexer
 
@@ -176,7 +182,7 @@ def highlight(value: str, filename: str) -> str:
         }
         lexer = mapping.get(extension)
         if lexer:
-            return highlight(value, lexer, HtmlFormatter(nowrap=True))  # type: ignore
+            return Markup(pygments_highlight(value, lexer, HtmlFormatter(nowrap=True)))
         return value
     except ImportError:
         return markupsafe.escape(value)
@@ -189,7 +195,7 @@ def save_str(value: typing.Any) -> str:
         return Markup(f'<span class="text-error">ERROR</span>: {html.escape(str(ex))}')
 
 
-jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__))
+jinja = jinja2.Environment(loader=jinja2.PackageLoader(__name__), autoescape=True)
 jinja.filters.update(
     {
         "symbol": get_symbol,
@@ -224,15 +230,22 @@ def generate_plain_text(exc: Exception) -> str:
 
 @dataclasses.dataclass
 class StackItem:
-    exc: Exception
+    exc: BaseException
     frames: typing.List[inspect.FrameInfo]
     has_vendor_frames: bool
     solution: str
     notes: typing.List[str]
 
 
+def _get_chained_exception(exc: BaseException) -> typing.Optional[BaseException]:
+    if exc.__cause__ is not None:
+        return exc.__cause__
+    if not exc.__suppress_context__ and exc.__context__ is not None:
+        return exc.__context__
+    return None
+
+
 def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
-    traceback_obj = traceback.TracebackException.from_exception(exc, capture_locals=True)
     frames = inspect.getinnerframes(exc.__traceback__, limit) if exc.__traceback__ else []
     stack = [
         StackItem(
@@ -243,26 +256,25 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
             has_vendor_frames=any(is_vendor(f) for f in frames),
         )
     ]
-    exception = exc
-    cause = getattr(exception, "__cause__")
+    cause: typing.Optional[BaseException] = _get_chained_exception(exc)
     while cause:
         frames = inspect.getinnerframes(cause.__traceback__, limit) if cause.__traceback__ else []
         stack.append(
             StackItem(
                 exc=cause,
                 solution=getattr(cause, "solution", ""),
-                notes=getattr(exc, "__notes__", []),
+                notes=getattr(cause, "__notes__", []),
                 frames=frames,
                 has_vendor_frames=any(is_vendor(f) for f in frames),
             )
         )
-        cause = getattr(cause, "__cause__")
+        cause = _get_chained_exception(cause)
 
     template = jinja.get_template("index.html")
     return template.render(
         {
-            "search_query": quote_plus(f"{format_qual_name(traceback_obj.exc_type)} {str(exc)}"),
-            "exception_class": format_qual_name(traceback_obj.exc_type),
+            "search_query": quote_plus(f"{format_qual_name(type(exc))} {str(exc)}"),
+            "exception_class": format_qual_name(type(exc)),
             "error_message": str(exc) or '""',
             "stack": stack,
             "request_method": request.method,
@@ -273,7 +285,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
                 "Path params": Markup(
                     "<br>".join(
                         [
-                            f'<span class="text-muted">{k}</span> = {html.escape(mask_secrets(str(v), k))}'
+                            f'<span class="text-muted">{markupsafe.escape(k)}</span> = {markupsafe.escape(mask_secrets(str(v), k))}'
                             for k, v in request.path_params.items()
                         ]
                     )
@@ -281,7 +293,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
                 "Query params": Markup(
                     "<br>".join(
                         [
-                            f'<span class="text-muted">{k}</span> = {html.escape(mask_secrets(str(v), k))}'
+                            f'<span class="text-muted">{markupsafe.escape(k)}</span> = {markupsafe.escape(mask_secrets(str(v), k))}'
                             for k, v in request.query_params.items()
                         ]
                     )
@@ -298,7 +310,7 @@ def generate_html(request: Request, exc: Exception, limit: int = 15) -> str:
                 "Python version": sys.version,
                 "Platform": sys.platform,
                 "Python": sys.executable,
-                "Paths": Markup("<br>".join(sys.path)),
+                "Paths": Markup("<br>".join(markupsafe.escape(p) for p in sys.path)),
             },
             "environment": os.environ,
             "solution": getattr(exc, "solution", None),

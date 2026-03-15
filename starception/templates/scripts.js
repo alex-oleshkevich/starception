@@ -2,9 +2,10 @@
  * Setup "Reveal secret" feature.
  */
 function bindSecretsReveal() {
-    document.querySelectorAll('[data-reveal]').forEach(function (el) {
-        el.addEventListener('click', function () {
-            el.innerText = el.dataset.reveal;
+    document.querySelectorAll('[data-reveal]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const parent = btn.closest('.masked-secret');
+            parent.textContent = btn.dataset.reveal;
         });
     });
 }
